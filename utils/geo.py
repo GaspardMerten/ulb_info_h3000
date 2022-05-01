@@ -2,6 +2,9 @@ import urllib.parse
 from dataclasses import dataclass
 
 import requests
+from diskcache import Cache
+
+cache = Cache("cache")
 
 OSM_ROUTING_DOMAIN = "routing.openstreetmap.de"
 OSM_NOMINATIM_DOMAIN = "nominatim.openstreetmap.org"
@@ -13,13 +16,14 @@ OSM_NOMINATIM_URL = f"https://{OSM_NOMINATIM_DOMAIN}/search/"
 @dataclass
 class Place:
     name: str
-    lat: int
-    long: int
+    lat: float
+    long: float
 
     def __hash__(self):
         return self.name.__hash__()
 
 
+@cache.memoize()
 def search(name, search_string) -> [float, float]:
     quoted_search_string = urllib.parse.quote(search_string)
     search_url = f"{OSM_NOMINATIM_URL}?q={quoted_search_string}&limit=1&format=json&addressdetails=1&country=Belgique&city=Bruxelles"
@@ -32,9 +36,10 @@ def search(name, search_string) -> [float, float]:
 
     address_dict = response_json[0]
 
-    return Place(name=name, lat=address_dict['lat'], long=address_dict['lon'])
+    return Place(name=name, lat=float(address_dict['lat']), long=float(address_dict['lon']))
 
 
+@cache.memoize()
 def get_time_between(origin: Place, destination: Place) -> float:
     time_url = f'{OSM_ROUTING_URL}{origin.long},{origin.lat};{destination.long},{destination.lat}'
     time_url_with_parameters = f'{time_url}?overview=false&alternatives=false&steps=false'
