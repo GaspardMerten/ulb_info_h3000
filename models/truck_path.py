@@ -5,6 +5,6 @@ from utils.geo import Place
 @dataclass
 class TruckPath:
     origin: Place
-    money: float
+    money: fl
     destination: Place
     distance: int
