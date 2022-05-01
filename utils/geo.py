@@ -18,6 +18,7 @@ class Place:
     name: str
     lat: float
     long: float
+    money: float
 
     def __hash__(self):
         return self.name.__hash__()
@@ -40,7 +41,7 @@ def search(name, search_string) -> [float, float]:
 
 
 @cache.memoize()
-def get_time_between(origin: Place, destination: Place) -> float:
+def get_distance_between(origin: Place, destination: Place) -> float:
     time_url = f'{OSM_ROUTING_URL}{origin.long},{origin.lat};{destination.long},{destination.lat}'
     time_url_with_parameters = f'{time_url}?overview=false&alternatives=false&steps=false'
 

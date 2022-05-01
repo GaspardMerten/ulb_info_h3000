@@ -1,17 +1,26 @@
 from models.truck import Truck
 from models.truck_path import TruckPath
+from domain.global_config import GlobalConfig
+from utils.geo import get_distance_between
 
 
 def compute_total_fitness(dna):
     pass
 
-def index_to_trucks(dna):
-    trucks = []
-    for truck in dna:
-        total_path = []
-        for truck_path in truck:
-            total_path.append(TruckPath())
 
+def index_to_trucks(dna, global_config: GlobalConfig):
+    trucks = []
+    for truck_points in dna:
+        total_path = []
+        for i in range(len(truck_points) - 1):
+            place1 = global_config.places[i]
+            place2 = global_config.places[i+1]
+            truck_path = TruckPath(
+                place1,
+                place2,
+                get_distance_between(place1, place2),
+                place1.money
+            )
 
 
 def compute_truck_fitness(truck: Truck) -> float:
