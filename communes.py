@@ -10,5 +10,3 @@ def get_all_addresses():
 
     return addresses
 
-
-print(str(get_all_addresses()))
