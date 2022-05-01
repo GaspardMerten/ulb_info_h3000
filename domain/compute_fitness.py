@@ -22,7 +22,6 @@ def index_to_trucks(dna, global_config: GlobalConfig):
                 place1.money
             )
 
-
 def compute_truck_fitness(truck: Truck) -> float:
     fitness = 0
     for path in truck.paths:
