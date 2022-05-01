@@ -1,7 +1,7 @@
 from models.truck import Truck
 from models.truck_path import TruckPath
 from utils import geo, csv
-from utils.plot import plot_truck_paths
+from utils.plot import plot_truck_paths_and_show, plot_truck_paths_and_places
 
 lat_long_for_town_halls = []
 
@@ -13,16 +13,15 @@ trucks = [
         paths=[
             TruckPath(
                 origin=t,
-                destination=t,
-                distance=lat_long_for_town_halls[index + 1]
+                destination=lat_long_for_town_halls[index + 1],
+                distance=0,
+                money=index
             )
-            for index, t in enumerate(lat_long_for_town_halls[:-1])
+            for index, t in enumerate(lat_long_for_town_halls[:5])
         ],
-        money=0
-    )
+    ),
 ]
 
-plot_truck_paths(trucks)
 
 exit()
 distance_dict = {}

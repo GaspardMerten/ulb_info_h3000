@@ -7,4 +7,3 @@ from models.truck_path import TruckPath
 @dataclass
 class Truck:
     paths: List[TruckPath]
-    money: float

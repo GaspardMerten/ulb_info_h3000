@@ -6,4 +6,5 @@ from utils.geo import Place
 class TruckPath:
     origin: Place
     destination: Place
+    money: float
     distance: int
