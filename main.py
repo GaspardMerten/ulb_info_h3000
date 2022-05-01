@@ -14,9 +14,9 @@ trucks = [
             TruckPath(
                 origin=t,
                 destination=t,
-                distance=lat_long_for_town_halls[index+1]
+                distance=lat_long_for_town_halls[index + 1]
             )
-            for index,t in enumerate(lat_long_for_town_halls[:-1])
+            for index, t in enumerate(lat_long_for_town_halls[:-1])
         ],
         money=0
     )

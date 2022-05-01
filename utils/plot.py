@@ -34,6 +34,6 @@ def plot_truck_paths(trucks: List[Truck]):
             y.append(path.origin.lat)
             y.append(path.destination.lat)
 
-        plt.plot(x, y, color='red')
+        plt.plot(x, y, color=plt.color)
 
     plt.show()
