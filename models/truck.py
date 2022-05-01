@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from truck_path import TruckPath
 from typing import List
+
+from models.truck_path import TruckPath
 
 
 @dataclass
