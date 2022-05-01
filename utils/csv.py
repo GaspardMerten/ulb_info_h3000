@@ -1,12 +1,11 @@
 import csv
 
 
-def get_all_addresses():
+def get_rows_from_csv(file_name: str):
     addresses = []
-    with open('communes.csv', 'r') as file:
+    with open(file_name, 'r') as file:
         reader = csv.reader(file)
         for row in reader:
-            addresses.append(row[1])
+            addresses.append(row)
 
     return addresses
-
