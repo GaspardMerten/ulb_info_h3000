@@ -24,6 +24,6 @@ def computing_with_genetics_algo(config: GlobalConfig, algo: INaturalSelection, 
 
         algo.apply_mutation_to_generation(generation=current_generation)
 
-        print(sorted(fitness.values()))
+        print(len(current_generation))
     print(current_generation)
     return current_generation

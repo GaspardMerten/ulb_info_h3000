@@ -30,7 +30,7 @@ class SimpleAlgo(INaturalSelection):
         dna[mutation_places[0]] = dna[mutation_places[1]]
         dna[mutation_places[1]] = buffer
 
-    def generate_child_from_parents(self, parent_one: DNA, parent_two: DNA) -> DNA:
+    def generate_children_from_parents(self, parent_one: DNA, parent_two: DNA) -> List[DNA]:
         switch_places = random.sample(range(1, 20), 10)
 
         for switch_place in switch_places:
@@ -41,4 +41,4 @@ class SimpleAlgo(INaturalSelection):
         if 0.5 < random.random():
             parent_one = parent_one[0:20] + parent_two[20:22]
 
-        return parent_one
+        return [parent_one, parent_two]

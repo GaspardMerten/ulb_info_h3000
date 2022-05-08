@@ -1,9 +1,9 @@
-from models import GlobalConfig, TruckPath, Truck
+from models import GlobalConfig, TruckPath, Truck, DNA, DNAFragment
 from utils.cache import cache
 
 
 @cache.memoize()
-def compute_total_fitness(dna, global_config) -> float:
+def compute_total_fitness(dna: DNA, global_config: GlobalConfig) -> float:
     """
     Takes a DNA and a global configuration, and returns the total fitness of the DNA
 
@@ -16,13 +16,13 @@ def compute_total_fitness(dna, global_config) -> float:
     groups = divide_by_truck(dna)
 
     for group_dna in groups:
-        truck = index_to_truck(group_dna, global_config)
+        truck = dna_fragment_to_truck(group_dna, global_config)
         total_fitness += compute_truck_fitness(truck)
 
     return total_fitness
 
 
-def index_to_truck(group_dna, global_config: GlobalConfig) -> Truck:
+def dna_fragment_to_truck(group_dna: DNAFragment, global_config: GlobalConfig) -> Truck:
     """
     Based on the information in the DNA of the truck, creating a truck object containing the list of path that if
     will go through
@@ -33,6 +33,8 @@ def index_to_truck(group_dna, global_config: GlobalConfig) -> Truck:
     :type global_config: GlobalConfig
     :return: The truck inferred by the DNA group
     """
+
+
     total_path = []
 
     if not group_dna:
