@@ -6,6 +6,5 @@ from models.geo import Place
 class TruckPath:
     origin: Place
     destination: Place
-    money: float
-    distance: int
+    distance: float
     money: float
