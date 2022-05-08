@@ -1,6 +1,5 @@
 import random
 from typing import List, Dict
-
 from domain.algo.genetics import INaturalSelection
 from models import DNA
 
