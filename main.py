@@ -1,4 +1,6 @@
 from domain import geo
+from domain.algo.compute_using_genetics import computing_with_genetics_algo
+from domain.algo.genetics import GeneticAlgorithmConfig
 from domain.geo import compute_distance_between_all_places, DistancesMap
 from models import GlobalConfig, Place
 from utils import csv
@@ -19,6 +21,12 @@ def main():
     distances_map: DistancesMap = compute_distance_between_all_places(places)
 
     global_config = GlobalConfig(places=places, distances_map=distances_map)
+
+    computing_with_genetics_algo(
+        global_config,
+        None,
+        GeneticAlgorithmConfig(number_of_elements=10, number_of_generations=10)
+    )
 
 
 if __name__ == '__main__':
