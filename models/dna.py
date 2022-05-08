@@ -1,9 +1,6 @@
-from typing import Tuple, List
+from typing import List
 
-__all__ = ('DNA', 'DNA_PATH')
+__all__ = ('DNA',)
 # Tuple of size 19 + 1 (0) + 2 (groups)
-DNA = List[
-    int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int]
+DNA = List[int]
 
-# Tuple of size 19
-DNA_PATH = List[int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int]

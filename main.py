@@ -1,7 +1,4 @@
-from domain import geo
-from domain.geo import compute_distance_between_all_places, DistancesMap
-from models import GlobalConfig, Place
-from utils import csv
+from domain.compute_fitness import compute_total_fitness
 from utils.compute_global_config import get_global_config
 
 

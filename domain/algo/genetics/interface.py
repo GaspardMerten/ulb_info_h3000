@@ -1,4 +1,4 @@
-import abc
+from abc import ABC, abstractmethod, ABCMeta
 import random
 from typing import List
 
@@ -7,23 +7,25 @@ from models.dna import DNA
 __all__ = ('INaturalSelection',)
 
 
-class INaturalSelection(abc.ABCMeta):
-    @abc.abstractmethod
+class INaturalSelection(ABCMeta):
+    @abstractmethod
     def get_mutation_rate(self) -> float:
-        pass
+        raise NotImplemented()
 
-    @abc.abstractmethod
+    @abstractmethod
     def apply_mutation(self, dna: DNA) -> None:
-        pass
+        raise NotImplemented()
 
+    @abstractmethod
     def apply_mutation_to_generation(cls, generation: List[DNA]):
         for dna in generation:
             if random.random() < cls.get_mutation_rate():
                 cls.apply_mutation(dna)
 
-    @abc.abstractmethod
+    @abstractmethod
     def generate_child_from_parents(self, parent_one: DNA, parent_two: DNA) -> DNA:
-        pass
+        raise NotImplemented()
 
-    def generate_new_generation(cls, old_generation: List[DNA]) -> List[DNA]:
+    @abstractmethod
+    def generate_new_generation(cls, old_generation: List[DNA], fitness: List[int]) -> List[DNA]:
         raise NotImplementedError()
