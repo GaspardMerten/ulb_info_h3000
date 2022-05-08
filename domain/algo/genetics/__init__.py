@@ -1,2 +1,2 @@
-from .interface import *
 from .config import *
+from .interface import *

@@ -11,17 +11,19 @@ def computing_with_genetics_algo(config: GlobalConfig, algo: INaturalSelection, 
         List[DNA]:
     current_generation: List[DNA] = [
         _generate_random_dna()
-        for _ in range(algo_config.number_of_elements)
+        for _ in range(algo_config.number_of_elements_per_generation)
     ]
 
     for turn in range(algo_config.number_of_generations):
-        fitness = [
-            compute_total_fitness(dna, config)
-            for dna in current_generation
-        ]
+        fitness = {
+            index: compute_total_fitness(dna, config)
+            for index, dna in enumerate(current_generation)
+        }
 
         current_generation = algo.generate_new_generation(current_generation, fitness)
 
         algo.apply_mutation_to_generation(generation=current_generation)
 
+        print(sorted(fitness.values()))
+    print(current_generation)
     return current_generation

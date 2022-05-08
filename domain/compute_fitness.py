@@ -1,7 +1,8 @@
-from domain.geo import get_distance_between
 from models import GlobalConfig, TruckPath, Truck
+from utils.cache import cache
 
 
+@cache.memoize()
 def compute_total_fitness(dna, global_config) -> float:
     """
     Takes a DNA and a global configuration, and returns the total fitness of the DNA
@@ -33,6 +34,9 @@ def index_to_truck(group_dna, global_config: GlobalConfig) -> Truck:
     :return: The truck inferred by the DNA group
     """
     total_path = []
+
+    if not group_dna:
+        return Truck(total_path)
 
     def _add_truck_path_from_places(place_1, place_2):
         truck_path = TruckPath(

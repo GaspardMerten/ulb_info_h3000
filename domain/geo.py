@@ -3,13 +3,12 @@ import urllib.parse
 from typing import List
 
 import requests
-from diskcache import Cache
 
 from models import Place, DistancesMap
 
 __all__ = ('get_distance_between', 'search', 'compute_distance_between_all_places')
 
-cache = Cache("cache")
+from utils.cache import cache
 
 OSM_ROUTING_DOMAIN = "routing.openstreetmap.de"
 OSM_NOMINATIM_DOMAIN = "nominatim.openstreetmap.org"
