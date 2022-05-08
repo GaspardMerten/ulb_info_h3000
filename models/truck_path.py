@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from models.geo import Place
 
 
-@dataclass
+@dataclass(slots=True)
 class TruckPath:
     origin: Place
     destination: Place
