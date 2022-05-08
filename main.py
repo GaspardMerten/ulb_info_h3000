@@ -1,4 +1,5 @@
 from domain import geo
+from domain.geo import compute_distance_between_all_places, DistancesMap
 from models import GlobalConfig, Place
 from utils import csv
 
@@ -15,9 +16,9 @@ def main():
 
         places.append(Place(name, long, lat, total_money_in_town_hall))
 
-    global_config = GlobalConfig(places=places)
+    distances_map: DistancesMap = compute_distance_between_all_places(places)
 
-    print(global_config)
+    global_config = GlobalConfig(places=places, distances_map=distances_map)
 
 
 if __name__ == '__main__':
