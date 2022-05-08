@@ -1,7 +1,5 @@
-from models.truck import Truck
-from models.truck_path import TruckPath
-from domain.global_config import GlobalConfig
-from models.geo import get_distance_between
+from domain.geo import get_distance_between
+from models import GlobalConfig, TruckPath, Truck
 
 
 def compute_total_fitness(dna):
@@ -14,13 +12,14 @@ def index_to_trucks(dna, global_config: GlobalConfig):
         total_path = []
         for i in range(len(truck_points) - 1):
             place1 = global_config.places[i]
-            place2 = global_config.places[i+1]
+            place2 = global_config.places[i + 1]
             truck_path = TruckPath(
                 place1,
                 place2,
                 get_distance_between(place1, place2),
                 place1.money
             )
+
 
 def compute_truck_fitness(truck: Truck) -> float:
     fitness = 0

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 __all__ = ('Place',)
 
 
-@dataclass
+@dataclass(slots=True)
 class Place:
     name: str
     lat: float
