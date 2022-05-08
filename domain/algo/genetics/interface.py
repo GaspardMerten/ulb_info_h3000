@@ -2,14 +2,17 @@ import random
 from abc import abstractmethod, ABC
 from typing import List, Dict
 
+from models import GlobalConfig
 from models.dna import DNA
 
 __all__ = ('INaturalSelection',)
 
 
 class INaturalSelection(ABC):
+    def __init__(self, config: GlobalConfig):
+        self.config: GlobalConfig = config
 
-    def generate_new_generation(self, old_generation: List[DNA], fitness: Dict[int, int],
+    def generat_new_generation(self, old_generation: List[DNA], fitness: Dict[int, int],
                                 children_per_mating: int = 2) -> List[DNA]:
         old_generation_size = len(old_generation)
 

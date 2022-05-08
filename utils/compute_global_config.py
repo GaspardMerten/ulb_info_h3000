@@ -9,7 +9,7 @@ def get_global_config():
 
     places = []
 
-    for name, address, population in csv.get_rows_from_csv('assets/town_halls.csv'):
+    for name, address, population in csv.get_rows_from_csv('../assets/town_halls.csv'):
         long, lat = geo.search(address)
 
         total_money_in_town_hall = int(population) * MONEY_PER_RESIDENT
