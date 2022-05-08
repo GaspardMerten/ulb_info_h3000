@@ -1,8 +1,10 @@
 import urllib.parse
-from dataclasses import dataclass
+import urllib.parse
 
 import requests
 from diskcache import Cache
+
+from models import Place
 
 cache = Cache("cache")
 
@@ -13,19 +15,8 @@ OSM_ROUTING_URL = f"https://{OSM_ROUTING_DOMAIN}/routed-car/route/v1/driving/"
 OSM_NOMINATIM_URL = f"https://{OSM_NOMINATIM_DOMAIN}/search/"
 
 
-@dataclass
-class Place:
-    name: str
-    lat: float
-    long: float
-    money: float
-
-    def __hash__(self):
-        return self.name.__hash__()
-
-
 @cache.memoize()
-def search(name, search_string) -> [float, float]:
+def search(search_string) -> [float, float]:
     quoted_search_string = urllib.parse.quote(search_string)
     search_url = f"{OSM_NOMINATIM_URL}?q={quoted_search_string}&limit=1&format=json&addressdetails=1&country=Belgique&city=Bruxelles"
 
@@ -37,7 +28,7 @@ def search(name, search_string) -> [float, float]:
 
     address_dict = response_json[0]
 
-    return Place(name=name, lat=float(address_dict['lat']), long=float(address_dict['lon']))
+    return float(address_dict['lat']), float(address_dict['lon'])
 
 
 @cache.memoize()

@@ -1,7 +1,7 @@
 from models.truck import Truck
 from models.truck_path import TruckPath
 from domain.global_config import GlobalConfig
-from utils.geo import get_distance_between
+from models.geo import get_distance_between
 
 
 def compute_total_fitness(dna):

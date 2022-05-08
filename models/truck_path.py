@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from utils.geo import Place
+from models.geo import Place
 
 
 @dataclass

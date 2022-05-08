@@ -2,7 +2,7 @@ from typing import List
 
 from matplotlib import pyplot as plt
 
-from utils.geo import Place
+from models.geo import Place
 
 
 def plot_places(places: List[Place]):
