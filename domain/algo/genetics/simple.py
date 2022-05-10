@@ -46,8 +46,8 @@ class SimpleAlgo(INaturalSelection):
         dna_list = list(dna)
 
         mutation_type = random.random()
-        if mutation_type < 0.2:
-            dna_list[20:21] = sorted(random.sample(range(1, 20), 2))
+        if mutation_type < 0.5:
+            dna_list[20:22] = sorted(random.sample(range(1, 20), 2))
 
         else:
             mutation_places = sorted(random.sample(range(1, 20), 2))

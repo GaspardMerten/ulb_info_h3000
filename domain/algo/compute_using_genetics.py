@@ -42,7 +42,7 @@ def computing_with_genetics_algo(
 
         best_dna = current_generation[best_dna_index]
 
-        if sum(best_dna[1:20]) != 190:
+        if sum(best_dna[1:20]) != 190 or len(best_dna) != 22:
             raise Exception(best_dna)
 
         total_fitness = compute_total_fitness(best_dna, config)
@@ -61,8 +61,15 @@ def computing_with_genetics_algo(
             previous_best = total_fitness
             previous_best_turn = turn
 
+            plot_truck_paths_and_show(
+                trucks=[
+                    dna_fragment_to_truck(frag, config)
+                    for frag in extract_fragments_from_dna(best_dna)
+                ],
+                title=str(total_fitness_separated) + " -> " + str(total_fitness),
+            )
 
-        print(f"Generation {turn}/{algo_config.number_of_generations}")
+        print(f"\rGeneration {turn}/{algo_config.number_of_generations}", end="")
 
         if turn - previous_best_turn > 1000:
             print("\nNo new best since 1000 generations, returning current generation")
