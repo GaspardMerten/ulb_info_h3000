@@ -2,6 +2,7 @@ import random
 from abc import abstractmethod, ABC
 from typing import List, Dict
 
+from models import GlobalConfig
 from models.dna import DNA
 
 __all__ = ('INaturalSelection',)
@@ -14,9 +15,10 @@ class INaturalSelection(ABC):
         old_generation_size = len(old_generation)
 
         parents_index = self.select_parents(old_generation, fitness)
+
         full_parents_index = [*parents_index]
 
-        while len(full_parents_index)*2 < old_generation_size:
+        while len(full_parents_index) * 2 < old_generation_size:
             full_parents_index.append(random.choice(parents_index))
 
         new_generation: List[DNA] = []
@@ -26,12 +28,13 @@ class INaturalSelection(ABC):
             new_generation += self.generate_children_from_parents(old_generation[parent_one],
                                                                   old_generation[parent_two])
 
+
         return new_generation
 
     def apply_mutation_to_generation(self, generation: List[DNA]):
-        for dna in generation:
+        for index, dna in enumerate(generation):
             if random.random() < self.get_mutation_rate():
-                self.apply_mutation(dna)
+                generation[index] = self.apply_mutation(dna)
 
     @abstractmethod
     def get_mutation_rate(self) -> float:
@@ -47,4 +50,8 @@ class INaturalSelection(ABC):
 
     @abstractmethod
     def select_parents(self, generation: List[DNA], fitness: Dict[int, int]) -> List[int]:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_boosted_dna(self, dna: DNA, config: GlobalConfig) -> DNA:
         raise NotImplementedError()

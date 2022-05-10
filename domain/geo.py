@@ -52,6 +52,7 @@ def compute_distance_between_all_places(places: List[Place]) -> DistancesMap:
     results: DistancesMap = {}
 
     for count, place_one in enumerate(places):
+        print(f'[CACHE] Fetched all distances for {place_one.name}')
         for place_two in places:
             if place_one != place_two:
                 results[(place_one, place_two)] = get_distance_between(place_one, place_two)
