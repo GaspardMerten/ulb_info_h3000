@@ -2,7 +2,6 @@ import random
 from functools import cache
 from math import ceil
 from typing import List, Dict
-
 from domain.algo.genetics import INaturalSelection
 from domain.compute_fitness import compute_total_fitness
 from models import DNA, GlobalConfig
