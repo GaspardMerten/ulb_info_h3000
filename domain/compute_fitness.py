@@ -20,8 +20,11 @@ def compute_total_fitness(dna: DNA, global_config: GlobalConfig) -> float:
     result = compute_total_fitness_separated(dna, global_config)
     return result[0] / _AVG_TOTAL_FITNESS_DISTANCE + result[1] / _AVG_TOTAL_FITNESS_RISK
 
+
 @cache
-def compute_total_fitness_separated(dna: DNA, global_config: GlobalConfig) -> Tuple[float, float]:
+def compute_total_fitness_separated(
+    dna: DNA, global_config: GlobalConfig
+) -> Tuple[float, float]:
     """
     Takes a DNA and a global configuration, and returns the total fitness of the DNA
 

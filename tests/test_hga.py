@@ -8,7 +8,6 @@ from utils.compute_global_config import get_global_config
 class TestHGAAlgo(TestCase):
     dna = [0, 3, 1, 2, 4, 7, 9, 6, 8, 5, 3, 7]
 
-
     def test_hga(self):
         hga = HGA(get_global_config())
-        print(hga.hga_algo([0, 1,2, 3, 4, 5], [0, 5, 3, 2, 4, 1]))
+        print(hga.hga_algo([0, 1, 2, 3, 4, 5], [0, 5, 3, 2, 4, 1]))

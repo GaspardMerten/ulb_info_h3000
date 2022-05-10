@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-__all__ = ('GeneticAlgorithmConfig',)
+__all__ = ("GeneticAlgorithmConfig",)
 
 
 @dataclass(slots=True)

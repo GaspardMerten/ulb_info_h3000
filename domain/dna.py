@@ -27,18 +27,22 @@ def dna_fragment_to_truck(group_dna: DNAFragment, global_config: GlobalConfig) -
         place_1 = global_config.places[group_dna[i]]
         place_2 = global_config.places[group_dna[i + 1]]
 
-        total_path.append(TruckPath(
-            place_1,
-            place_2,
-            global_config.get_distance_between(place_1, place_2),
-            place_1.money
-        ))
+        total_path.append(
+            TruckPath(
+                place_1,
+                place_2,
+                global_config.get_distance_between(place_1, place_2),
+                place_1.money,
+            )
+        )
 
     return Truck(tuple(total_path))
 
 
 @cache.memoize()
-def extract_fragments_from_dna(dna: DNA) -> Tuple[DNAFragment, DNAFragment, DNAFragment]:
+def extract_fragments_from_dna(
+    dna: DNA,
+) -> Tuple[DNAFragment, DNAFragment, DNAFragment]:
     """
     Takes a DNA sequence and returns a list of three DNA sequences, each of which is a subsequence of the original.
     It is used in order to divide the whole DNA in a group of 3 DNA's. It must be noted that the first number (0)

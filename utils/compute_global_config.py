@@ -4,7 +4,7 @@ from models import GlobalConfig, Place
 from utils import csv
 
 
-def get_global_config(asset_file: str = 'assets/town_halls.csv'):
+def get_global_config(asset_file: str = "assets/town_halls.csv"):
     MONEY_PER_RESIDENT = 0.7
 
     places = []
@@ -16,7 +16,7 @@ def get_global_config(asset_file: str = 'assets/town_halls.csv'):
 
         places.append(Place(name, long, lat, total_money_in_town_hall))
 
-        print(f'Fetched ${address}')
+        print(f"Fetched ${address}")
 
     distances_map = compute_distance_between_all_places(places)
     return GlobalConfig(places=places, distances_map=distances_map)

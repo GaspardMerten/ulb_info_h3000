@@ -11,7 +11,7 @@ def main():
 
     generation = computing_with_genetics_algo(
         global_config,
-        SimpleAlgo(),
+        SimpleAlgo(global_config),
         GeneticAlgorithmConfig(
             number_of_generations=10000,
             number_of_elements_per_generation=50,

@@ -15,5 +15,7 @@ class TestFitness(TestCase):
         assert division == [[3, 1, 2], [4, 7, 9, 6], [8, 5]]
 
     def test_index_to_truck(self):
-        truck = dna_fragment_to_truck([8, 5], get_global_config('../assets/town_halls.csv'))
+        truck = dna_fragment_to_truck(
+            [8, 5], get_global_config("../assets/town_halls.csv")
+        )
         print(truck.paths)

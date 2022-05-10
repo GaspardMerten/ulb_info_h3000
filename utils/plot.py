@@ -25,7 +25,7 @@ def _plot_places(places):
     )
 
 
-def plot_truck_paths_and_show(trucks: List[Truck], title: str=''):
+def plot_truck_paths_and_show(trucks: List[Truck], title: str = ""):
     _plot_truck_paths(trucks)
 
     plt.title(title)
@@ -48,13 +48,8 @@ def _plot_truck_paths(trucks):
             y.append(path.destination.lat)
 
             line_width = max(1, (path.money / compute_max_money) * 4)
-            color = ['red', 'green', 'blue', 'cyan'][count % 3]
-            plt.plot(
-                x,
-                y,
-                color=color,
-                linewidth=line_width
-            )
+            color = ["red", "green", "blue", "cyan"][count % 3]
+            plt.plot(x, y, color=color, linewidth=line_width)
 
 
 def plot_truck_paths_and_places(trucks: List[Truck], places: List[Place]):

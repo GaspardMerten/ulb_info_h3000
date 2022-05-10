@@ -3,7 +3,7 @@ from typing import List
 
 from models.geo import Place, DistancesMap
 
-__all__ = ('GlobalConfig',)
+__all__ = ("GlobalConfig",)
 
 
 @dataclass(slots=True)
