@@ -10,7 +10,7 @@ from models import DNA
 
 class SimpleAlgo(INaturalSelection):
     def select_parents(
-        self, generation: List[DNA], fitness: Dict[int, float]
+            self, generation: List[DNA], fitness: Dict[int, float]
     ) -> List[int]:
         ordered_fitness: List[int] = list(
             dict(sorted(fitness.items(), key=lambda item: item[1])).keys()
@@ -20,7 +20,7 @@ class SimpleAlgo(INaturalSelection):
         # Select 2% best
         two_percent_index = ceil(ordered_fitness_length / 50)
 
-        ultra_elit_mode = ordered_fitness[0 : two_percent_index + 1] * 4
+        ultra_elit_mode = ordered_fitness[0: two_percent_index + 1] * 4
 
         twenty_percent_index = round(ordered_fitness_length / 5)
         eighty_percent_index = round(ordered_fitness_length / 10 * 8)
@@ -34,7 +34,7 @@ class SimpleAlgo(INaturalSelection):
         )
 
         selected_parents_indexes = (
-            ultra_elit_mode + selected_elit_mode + random_populace_mode
+                ultra_elit_mode + selected_elit_mode + random_populace_mode
         )
         return selected_parents_indexes
 
@@ -52,16 +52,16 @@ class SimpleAlgo(INaturalSelection):
         else:
             mutation_places = sorted(random.sample(range(1, 20), 2))
 
-            dna_list[mutation_places[0] : mutation_places[1]] = reversed(
-                dna_list[mutation_places[0] : mutation_places[1]]
+            dna_list[mutation_places[0]: mutation_places[1]] = reversed(
+                dna_list[mutation_places[0]: mutation_places[1]]
             )
 
         return tuple(dna_list)
 
     def generate_children_from_parents(
-        self, parent_one: DNA, parent_two: DNA
+            self, parent_one: DNA, parent_two: DNA
     ) -> List[DNA]:
-        switch_places = random.sample(range(1, 20), 3)
+        switch_places = random.sample(range(1, 20), random.randint(1,10))
 
         parent_one_list = list(parent_one)
         parent_two_list = list(parent_two)
@@ -73,7 +73,7 @@ class SimpleAlgo(INaturalSelection):
                 parent_one_list.index(parent_two_list[switch_place])
             ] = buffer
 
-        switch_places = random.sample(range(1, 20), 3)
+        switch_places = random.sample(range(1, 20), random.randint(1,10))
 
         for switch_place in switch_places:
             buffer = parent_two_list[switch_place]
