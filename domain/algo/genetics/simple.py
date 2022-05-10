@@ -20,51 +20,63 @@ class SimpleAlgo(INaturalSelection):
         two_percent_index = ceil(ordered_fitness_length / 50)
 
         # 8% (2% * 4)
-        ultra_elit_mode = ordered_fitness[0: two_percent_index + 1] * 4
+        ultra_elit_mode = ordered_fitness[0: two_percent_index + 1] * 5
 
         twenty_percent_index = round(ordered_fitness_length / 5)
-        eighty_percent_index = round(ordered_fitness_length / 10 * 8)
+        eighty_percent_index = round(ordered_fitness_length / 10 * 9)
 
-        # Select 20% best
+        # Select 10% best
         selected_elit_mode = ordered_fitness[0:twenty_percent_index]
 
-        # Select 20% from losers
         random_populace_mode = random.choices(
             ordered_fitness[twenty_percent_index:eighty_percent_index],
-            k=round(ordered_fitness_length / 5),
+            k=round(ordered_fitness_length / 10),
         )
 
         selected_parents_indexes = (
                 ultra_elit_mode + selected_elit_mode + random_populace_mode
         )
-        assert (len(selected_parents_indexes) < len(generation) / 2, "Too many selected parents")
+        assert (
+                len(selected_parents_indexes) < len(generation) / 2
+        ), "Too many selected parents"
 
         return selected_parents_indexes
 
-    def get_mutation_rate(self) -> float:
-        return 0.3
+    def get_mutation_rate(self, current_population: List[DNA]) -> float:
+        return .6
 
     # noinspection PyTypeChecker
     def apply_mutation(self, dna: DNA) -> DNA:
         dna_list = list(dna)
 
-        mutation_type = random.random()
-        if mutation_type < 0.5:
+        if random.random() < .5:
             dna_list[20:22] = sorted(random.sample(range(1, 20), 2))
 
-        else:
+            mutation_places = sorted(random.sample(range(1, 20), 2))
+            part = dna_list[mutation_places[0]: mutation_places[1]]
+            random.shuffle(part)
+            dna_list[mutation_places[0]: mutation_places[1]] = part
+
             mutation_places = sorted(random.sample(range(1, 20), 2))
 
             dna_list[mutation_places[0]: mutation_places[1]] = reversed(
                 dna_list[mutation_places[0]: mutation_places[1]]
             )
+        else:
+            mutation_places = sorted(random.sample(range(1, 20), 2))
+            dna_fragment = dna_list[mutation_places[0]: mutation_places[1]]
+            dna_list[mutation_places[0]: mutation_places[1]] = [-1] * (mutation_places[1] - mutation_places[0])
+            insert_place = random.randint(1, 20)
+            dna_list[insert_place:insert_place] = dna_fragment
+            dna_list = [a for a in dna_list if a != -1]
+
 
         return tuple(dna_list)
 
     def generate_children_from_parents(
             self, parent_one: DNA, parent_two: DNA
     ) -> List[DNA]:
-        switch_places = random.sample(range(1, 20), random.randint(1,10))
+        switch_places = random.sample(range(1, 20), random.randint(1, 10))
 
         parent_one_list = list(parent_one)
         parent_two_list = list(parent_two)
@@ -76,7 +88,7 @@ class SimpleAlgo(INaturalSelection):
                 parent_one_list.index(parent_two_list[switch_place])
             ] = buffer
 
-        switch_places = random.sample(range(1, 20), random.randint(1,10))
+        switch_places = random.sample(range(1, 20), random.randint(1, 10))
 
         for switch_place in switch_places:
             buffer = parent_two_list[switch_place]

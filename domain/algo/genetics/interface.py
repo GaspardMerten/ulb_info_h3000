@@ -16,7 +16,6 @@ class INaturalSelection(ABC):
         self,
         old_generation: List[DNA],
         fitness: Dict[int, int],
-        children_per_mating: int = 2,
     ) -> List[DNA]:
         old_generation_size = len(old_generation)
 
@@ -41,11 +40,11 @@ class INaturalSelection(ABC):
 
     def apply_mutation_to_generation(self, generation: List[DNA]):
         for index, dna in enumerate(generation):
-            if random.random() < self.get_mutation_rate():
+            if random.random() < self.get_mutation_rate(generation):
                 generation[index] = self.apply_mutation(dna)
 
     @abstractmethod
-    def get_mutation_rate(self) -> float:
+    def get_mutation_rate(self, current_population: List[DNA]) -> float:
         raise NotImplemented()
 
     @abstractmethod

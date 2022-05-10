@@ -1,4 +1,3 @@
-import random
 from math import inf
 from typing import List
 
@@ -10,71 +9,65 @@ from domain.compute_fitness import (
 )
 from domain.dna import (
     generate_random_dna,
-    dna_fragment_to_truck,
-    extract_fragments_from_dna,
 )
 from models import GlobalConfig, DNA
-from utils.plot import plot_truck_paths_and_show, plot_truck_paths_and_places
 
 
 def computing_with_genetics_algo(
         config: GlobalConfig, algo: INaturalSelection, algo_config: GeneticAlgorithmConfig
 ) -> List[DNA]:
     current_generation: List[DNA] = [
-        algo.get_boosted_dna(generate_random_dna())
+        generate_random_dna()
+        # algo.get_boosted_dna(generate_random_dna())
         for _ in range(algo_config.number_of_elements_per_generation)
     ]
 
     previous_best = inf
-    previous_best_turn = 0
 
     for turn in range(algo_config.number_of_generations):
-        print(len(current_generation))
+        fitness = {
+            index: compute_total_fitness(dna, config)
+            for index, dna in enumerate(current_generation)
+        }
+        current_generation = algo.generate_new_generation(current_generation, fitness)
+
+        algo.apply_mutation_to_generation(generation=current_generation)
+
         fitness = {
             index: compute_total_fitness(dna, config)
             for index, dna in enumerate(current_generation)
         }
 
-        current_generation = algo.generate_new_generation(current_generation, fitness)
+        total_fitness = sorted(fitness.values())[0]
+        print("MAX VALUE: " + str(total_fitness))
+        best_dna_index = None
 
-        algo.apply_mutation_to_generation(generation=current_generation)
-
-        best_dna_index = sorted(fitness.items(), key=lambda x: x[1])[0][0]
+        for x, v in fitness.items():
+            if v == total_fitness:
+                best_dna_index = x
 
         best_dna = current_generation[best_dna_index]
 
-        if sum(best_dna[1:20]) != 190 or len(best_dna) != 22:
-            raise Exception(best_dna)
-
-        total_fitness = compute_total_fitness(best_dna, config)
+        assert (
+                sum(best_dna[1:20]) == 190 and len(best_dna) == 22
+        ), f"Incorrect DNA produced: {best_dna}"
 
         if previous_best > total_fitness:
-            print(f'\nNew best {best_dna}\n')
-            if random.random() < 0.1:
-                boosted_dna = algo.get_boosted_dna(current_generation[best_dna_index])
-                if boosted_dna != best_dna:
-                    current_generation[best_dna_index] = boosted_dna
-                    best_dna = current_generation[best_dna_index]
-                    total_fitness = compute_total_fitness(best_dna, config)
+            print(f"\nNew best {best_dna}\n")
+
+            boosted_dna = algo.get_boosted_dna(current_generation[best_dna_index])
+            if boosted_dna != best_dna:
+                current_generation[best_dna_index] = boosted_dna
+                total_fitness = compute_total_fitness(best_dna, config)
+                best_dna = current_generation[best_dna_index]
 
             total_fitness_separated = compute_total_fitness_separated(best_dna, config)
 
             previous_best = total_fitness
-            previous_best_turn = turn
 
-            plot_truck_paths_and_places(
-                trucks=[
-                    dna_fragment_to_truck(frag, config)
-                    for frag in extract_fragments_from_dna(best_dna)
-                ],
-                places=config.places,
-                title=str(total_fitness_separated) + " -> " + str(total_fitness),
-            )
-
-        print(f"\rGeneration {turn}/{algo_config.number_of_generations}", end="")
-
-        if turn - previous_best_turn > 1000:
-            print("\nNo new best since 1000 generations, returning current generation")
-            return current_generation
+        print(
+            f"\rGeneration {turn}/{algo_config.number_of_generations} {len(current_generation)} {len(set(current_generation))}, \nTotal fitness:  {total_fitness}",
+            end="",
+        )
 
     return current_generation
