@@ -21,7 +21,7 @@ def computing_with_genetics_algo(
         config: GlobalConfig, algo: INaturalSelection, algo_config: GeneticAlgorithmConfig
 ) -> List[DNA]:
     current_generation: List[DNA] = [
-        generate_random_dna()
+        algo.get_boosted_dna(generate_random_dna())
         for _ in range(algo_config.number_of_elements_per_generation)
     ]
 
