@@ -62,7 +62,6 @@ def computing_with_genetics_algo(
             previous_best_turn = turn
 
 
-        print(f"\n{current_generation}")
         print(f"Generation {turn}/{algo_config.number_of_generations}")
 
         if turn - previous_best_turn > 1000:
