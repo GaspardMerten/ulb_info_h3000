@@ -65,8 +65,8 @@ def computing_with_genetics_algo(
         print(f"\n{current_generation}")
         print(f"Generation {turn}/{algo_config.number_of_generations}")
 
-        if turn - previous_best_turn > 50:
-            print("\nNo new best since 50 generations, returning current generation")
+        if turn - previous_best_turn > 1000:
+            print("\nNo new best since 1000 generations, returning current generation")
             return current_generation
 
     return current_generation
