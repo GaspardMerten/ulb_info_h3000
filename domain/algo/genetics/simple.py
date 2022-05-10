@@ -17,9 +17,9 @@ class SimpleAlgo(INaturalSelection):
         )
         ordered_fitness_length = len(ordered_fitness)
 
-        # Select 2% best
         two_percent_index = ceil(ordered_fitness_length / 50)
 
+        # 8% (2% * 4)
         ultra_elit_mode = ordered_fitness[0: two_percent_index + 1] * 4
 
         twenty_percent_index = round(ordered_fitness_length / 5)
@@ -28,14 +28,17 @@ class SimpleAlgo(INaturalSelection):
         # Select 20% best
         selected_elit_mode = ordered_fitness[0:twenty_percent_index]
 
+        # Select 20% from losers
         random_populace_mode = random.choices(
             ordered_fitness[twenty_percent_index:eighty_percent_index],
-            k=round(ordered_fitness_length / 4),
+            k=round(ordered_fitness_length / 5),
         )
 
         selected_parents_indexes = (
                 ultra_elit_mode + selected_elit_mode + random_populace_mode
         )
+        assert (len(selected_parents_indexes) < len(generation) / 2, "Too many selected parents")
+
         return selected_parents_indexes
 
     def get_mutation_rate(self) -> float:

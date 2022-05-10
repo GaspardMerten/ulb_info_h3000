@@ -14,7 +14,7 @@ from domain.dna import (
     extract_fragments_from_dna,
 )
 from models import GlobalConfig, DNA
-from utils.plot import plot_truck_paths_and_show
+from utils.plot import plot_truck_paths_and_show, plot_truck_paths_and_places
 
 
 def computing_with_genetics_algo(
@@ -29,6 +29,7 @@ def computing_with_genetics_algo(
     previous_best_turn = 0
 
     for turn in range(algo_config.number_of_generations):
+        print(len(current_generation))
         fitness = {
             index: compute_total_fitness(dna, config)
             for index, dna in enumerate(current_generation)
@@ -61,11 +62,12 @@ def computing_with_genetics_algo(
             previous_best = total_fitness
             previous_best_turn = turn
 
-            plot_truck_paths_and_show(
+            plot_truck_paths_and_places(
                 trucks=[
                     dna_fragment_to_truck(frag, config)
                     for frag in extract_fragments_from_dna(best_dna)
                 ],
+                places=config.places,
                 title=str(total_fitness_separated) + " -> " + str(total_fitness),
             )
 

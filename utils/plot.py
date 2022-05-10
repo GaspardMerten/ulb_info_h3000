@@ -25,7 +25,7 @@ def _plot_places(places):
     )
 
 
-def plot_truck_paths_and_show(trucks: List[Truck], title: str = ""):
+def plot_truck_paths_and_show(trucks: List[Truck], title: str = "") -> object:
     _plot_truck_paths(trucks)
 
     plt.title(title)
@@ -52,8 +52,9 @@ def _plot_truck_paths(trucks):
             plt.plot(x, y, color=color, linewidth=line_width)
 
 
-def plot_truck_paths_and_places(trucks: List[Truck], places: List[Place]):
+def plot_truck_paths_and_places(trucks: List[Truck], places: List[Place], title=''):
     _plot_places(places)
     _plot_truck_paths(trucks)
 
+    plt.title(title)
     plt.show()
