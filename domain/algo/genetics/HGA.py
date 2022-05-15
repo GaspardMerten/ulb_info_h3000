@@ -179,11 +179,54 @@ class HGA(INaturalSelection):
 
         return result
 
-    def get_mutation_rate(self) -> float:
-        raise NotImplemented()
+    def get_mutation_rate(self, current_population: List[DNA]) -> float:
+        return .6
 
-    def apply_mutation(self, dna: DNA) -> None:
-        raise NotImplemented()
+    def apply_mutation(self, dna: DNA) -> DNA:
+        random_result = random.random()
+
+        if random_result < 0.5:  # 50%
+            return self.apply_type_one_mutation(dna)
+        else:
+            return self.apply_type_two_mutation(dna)
+
+    def apply_type_one_mutation(self, dna: DNA) -> DNA:
+        dna_list = list(dna)
+
+        # Part 1
+        mutation_places = sorted(random.sample(range(1, 20), 2))
+
+        dna_list[mutation_places[0]: mutation_places[1]] = reversed(
+            dna_list[mutation_places[0]: mutation_places[1]]
+        )
+
+        # Part 2
+        self.randomize_group_part(dna_list)
+
+        return tuple(dna_list)
+
+    def apply_type_two_mutation(self, dna: DNA) -> DNA:
+        dna_list = list(dna)
+
+        # Part 1
+        switch_places = sorted(random.sample(range(1, 20), 2))
+
+        group_1, group_2, group_3 = (
+            dna_list[1: switch_places[0]],
+            dna_list[switch_places[0], switch_places[1]],
+            dna_list[switch_places[1], 20],
+        )
+
+        dna_list = group_2 + group_1 + group_3 + dna_list[20:22]
+
+        # Part 2
+        self.randomize_group_part(dna_list)
+
+        return tuple(dna_list)
+
+    @staticmethod
+    def randomize_group_part(dna_list):
+        dna_list[20:22] = sorted(random.sample(range(1, 20), 2))
 
     def get_boosted_dna(self, dna: DNA) -> DNA:
         dna_list = list(dna)
