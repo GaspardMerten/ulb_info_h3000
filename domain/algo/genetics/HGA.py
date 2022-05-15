@@ -1,6 +1,7 @@
 import random
 from typing import List, Dict, Tuple, Any
 from domain.algo.genetics import INaturalSelection
+from domain.compute_fitness import compute_total_fitness
 from domain.dna import extract_fragments_from_dna
 from models import DNA
 
