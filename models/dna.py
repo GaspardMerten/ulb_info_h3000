@@ -24,5 +24,6 @@ DNA = Tuple[
     int,
     int,
     int,
+    int,
 ]
 DNAFragment = Tuple[int, ...]
