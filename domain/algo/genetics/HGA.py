@@ -9,10 +9,6 @@ from models import DNA
 
 
 def get_latter_city(dna, k):
-    print(k)
-    print("len" + str(len(dna)))
-    print(dna)
-
     position = dna.index(k)
 
     if len(dna) - 1 == position:
@@ -78,7 +74,7 @@ class HGA(INaturalSelection):
         # Deleting consecutive zeros
         zero_index = None
         for i in range(0, len(dna_list) - 1):
-            if dna_list[i] == 0 and dna_list[i+1] == 0:
+            if dna_list[i] == 0 and dna_list[i + 1] == 0:
                 zero_index = i
                 break
 
@@ -86,7 +82,7 @@ class HGA(INaturalSelection):
             random_index = list(range(2, len(dna_list)))
             dna_list.pop(zero_index)
 
-            del random_index[zero_index:zero_index+2]
+            del random_index[zero_index:zero_index + 2]
 
             final_index = random.choice(random_index)
             dna_list.insert(final_index, 0)
@@ -95,12 +91,10 @@ class HGA(INaturalSelection):
         for index, value in enumerate(dna_list):
             if index != 0 and value == 0:
                 positions.append(index - 1 - len(positions))
-        print("dsds" + str(dna_list))
 
         for i in range(3):
             dna_list.remove(0)
         dna_list.insert(0, 0)
-
 
         dna_list = dna_list + positions
 
@@ -144,18 +138,17 @@ class HGA(INaturalSelection):
     def hga_algo(self, parent_one, parent_two):
         parent_one_list = list(parent_one)
         parent_two_list = list(parent_two)
+
         parent_one_length = len(parent_one_list)
         k = random.choice(list(set(parent_one)))
-
-        print("PARENR1" + str(len(parent_one_list)))
 
         result = [k]
 
         while parent_one_length > 1:
             if self.MARK == "LATTER":
-                print("parent1")
+
                 x = get_latter_city(parent_one_list, k)
-                print("parent2")
+
                 y = get_latter_city(parent_two_list, k)
             else:
                 x = get_former_city(parent_one_list, k)
@@ -178,7 +171,6 @@ class HGA(INaturalSelection):
 
             result.append(k)
             parent_one_length = len(parent_one_list)
-            print("result = " + str(result))
 
         return result
 
@@ -189,9 +181,12 @@ class HGA(INaturalSelection):
         random_result = random.random()
 
         if random_result < 0.5:  # 50%
-            return self.apply_type_one_mutation(dna)
+            new_dna = self.apply_type_one_mutation(dna)
+
         else:
-            return self.apply_type_two_mutation(dna)
+            new_dna = self.apply_type_two_mutation(dna)
+
+        return new_dna
 
     def apply_type_one_mutation(self, dna: DNA) -> DNA:
         dna_list = list(dna)
@@ -215,12 +210,12 @@ class HGA(INaturalSelection):
         switch_places = sorted(random.sample(range(1, 20), 2))
 
         group_1, group_2, group_3 = (
-            dna_list[1: switch_places[0]],
+            dna_list[1:switch_places[0]],
             dna_list[switch_places[0]: switch_places[1]],
             dna_list[switch_places[1]: 20],
         )
 
-        dna_list = group_2 + group_1 + group_3 + dna_list[20:22]
+        dna_list = [0] + group_2 + group_1 + group_3 + dna_list[20:22]
 
         # Part 2
         self.randomize_group_part(dna_list)
