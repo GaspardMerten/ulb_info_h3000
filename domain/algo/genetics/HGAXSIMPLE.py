@@ -46,6 +46,17 @@ class HGAXSimple(HGA):
     def get_mutation_rate(self, current_population: List[DNA]) -> float:
         return .6
 
+    def generate_children_from_parents(
+            self, parent_one: DNA, parent_two: DNA
+    ) -> List[DNA]:
+        if random.random() < .2:
+            return parent_one, parent_two
+
+        child1 = self.generate_child1(parent_one, parent_two)
+        child2 = self.generate_child2(parent_one, parent_two)
+
+        return child1, child2
+
     # noinspection PyTypeChecker
     def apply_mutation(self, dna: DNA) -> DNA:
         dna_list = list(dna)
