@@ -1,6 +1,8 @@
 import random
+from functools import cache
 from typing import List, Dict, Tuple, Any
-from domain.algo.genetics import INaturalSelection
+
+from domain.algo.genetics.interface import INaturalSelection
 from domain.compute_fitness import compute_total_fitness
 from domain.dna import extract_fragments_from_dna
 from models import DNA
@@ -214,8 +216,8 @@ class HGA(INaturalSelection):
 
         group_1, group_2, group_3 = (
             dna_list[1: switch_places[0]],
-            dna_list[switch_places[0], switch_places[1]],
-            dna_list[switch_places[1], 20],
+            dna_list[switch_places[0]: switch_places[1]],
+            dna_list[switch_places[1]: 20],
         )
 
         dna_list = group_2 + group_1 + group_3 + dna_list[20:22]
@@ -229,7 +231,8 @@ class HGA(INaturalSelection):
     def randomize_group_part(dna_list):
         dna_list[20:22] = sorted(random.sample(range(1, 20), 2))
 
-    def get_boosted_dna(self, dna: DNA) -> DNA:
+    @cache
+    def get_boosted_dna(self, dna: DNA) -> Tuple[DNA, float]:
         dna_list = list(dna)
 
         dna_without_group = dna_list[0:20]
@@ -245,7 +248,7 @@ class HGA(INaturalSelection):
                 if dna_score < max_dna_score:
                     max_dna_score = dna_score
                     max_dna = tmp_dna
-        print(
-            f"\nBoosted DNA: \nFrom {old_dna_score} to {max_dna_score}\nImprovement: {round((1 - max_dna_score / old_dna_score) * 100, 2)}%"
-        )
-        return tuple(max_dna)
+
+        improvement_percentage = round((1 - max_dna_score / old_dna_score) * 100, 2)
+
+        return tuple(max_dna), improvement_percentage
