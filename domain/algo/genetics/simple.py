@@ -1,9 +1,9 @@
 import random
 from functools import cache
 from math import ceil
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
-from domain.algo.genetics import INaturalSelection
+from domain.algo.genetics.interface import INaturalSelection
 from domain.compute_fitness import compute_total_fitness
 from models import DNA
 
@@ -70,7 +70,6 @@ class SimpleAlgo(INaturalSelection):
             dna_list[insert_place:insert_place] = dna_fragment
             dna_list = [a for a in dna_list if a != -1]
 
-
         return tuple(dna_list)
 
     def generate_children_from_parents(
@@ -109,7 +108,7 @@ class SimpleAlgo(INaturalSelection):
         return [parent_one, parent_two]
 
     @cache
-    def get_boosted_dna(self, dna: DNA) -> DNA:
+    def get_boosted_dna(self, dna: DNA) -> Tuple[DNA, float]:
         dna_list = list(dna)
 
         dna_without_group = dna_list[0:20]
@@ -125,7 +124,7 @@ class SimpleAlgo(INaturalSelection):
                 if dna_score < max_dna_score:
                     max_dna_score = dna_score
                     max_dna = tmp_dna
-        print(
-            f"\nBoosted DNA: \nFrom {old_dna_score} to {max_dna_score}\nImprovement: {round((1 - max_dna_score / old_dna_score) * 100, 2)}%"
-        )
-        return tuple(max_dna)
+
+        improvement_percentage = round((1 - max_dna_score / old_dna_score) * 100, 2)
+
+        return tuple(max_dna), improvement_percentage

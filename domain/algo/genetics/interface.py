@@ -1,8 +1,8 @@
 import random
 from abc import abstractmethod, ABC
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
-from models import GlobalConfig
+from models.config import GlobalConfig
 from models.dna import DNA
 
 __all__ = ("INaturalSelection",)
@@ -45,17 +45,17 @@ class INaturalSelection(ABC):
 
     @abstractmethod
     def get_mutation_rate(self, current_population: List[DNA]) -> float:
-        raise NotImplemented()
+        raise NotImplementedError()
 
     @abstractmethod
     def apply_mutation(self, dna: DNA) -> None:
-        raise NotImplemented()
+        raise NotImplementedError()
 
     @abstractmethod
     def generate_children_from_parents(
         self, parent_one: DNA, parent_two: DNA
     ) -> List[DNA]:
-        raise NotImplemented()
+        raise NotImplementedError()
 
     @abstractmethod
     def select_parents(
@@ -64,5 +64,5 @@ class INaturalSelection(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_boosted_dna(self, dna: DNA) -> DNA:
+    def get_boosted_dna(self, dna: DNA) -> Tuple[DNA, float]:
         raise NotImplementedError()
