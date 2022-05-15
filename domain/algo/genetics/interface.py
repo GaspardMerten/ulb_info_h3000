@@ -1,8 +1,8 @@
 import random
 from abc import abstractmethod, ABC
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
-from models import GlobalConfig
+from models.config import GlobalConfig
 from models.dna import DNA
 
 __all__ = ("INaturalSelection",)
@@ -64,5 +64,5 @@ class INaturalSelection(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_boosted_dna(self, dna: DNA) -> DNA:
+    def get_boosted_dna(self, dna: DNA) -> Tuple[DNA, float]:
         raise NotImplementedError()
