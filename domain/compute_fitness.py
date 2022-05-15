@@ -1,8 +1,14 @@
-from models import GlobalConfig, TruckPath, Truck, DNA, DNAFragment
-from utils.cache import cache
+from functools import cache
+from typing import Tuple
+
+from domain.dna import extract_fragments_from_dna, dna_fragment_to_truck
+from models import GlobalConfig, Truck, DNA
+
+_AVG_TOTAL_FITNESS_RISK = 8000000000
+_AVG_TOTAL_FITNESS_DISTANCE = 70000
 
 
-@cache.memoize()
+@cache
 def compute_total_fitness(dna: DNA, global_config: GlobalConfig) -> float:
     """
     Takes a DNA and a global configuration, and returns the total fitness of the DNA
@@ -11,64 +17,37 @@ def compute_total_fitness(dna: DNA, global_config: GlobalConfig) -> float:
     :param global_config: the configuration file contating the list of the places
     :return: The total fitness of the DNA.
     """
-    total_fitness = 0
+    result = compute_total_fitness_separated(dna, global_config)
+    return result[0] / _AVG_TOTAL_FITNESS_DISTANCE + result[1] / _AVG_TOTAL_FITNESS_RISK
 
-    groups = divide_by_truck(dna)
+
+@cache
+def compute_total_fitness_separated(
+    dna: DNA, global_config: GlobalConfig
+) -> Tuple[float, float]:
+    """
+    Takes a DNA and a global configuration, and returns the total fitness of the DNA
+
+    :param dna: The DNA of the model
+    :param global_config: the configuration file contating the list of the places
+    :return: The total fitness of the DNA.
+    """
+    total_fitness_distance = 0
+    total_fitness_risk = 0
+
+    groups = extract_fragments_from_dna(dna)
 
     for group_dna in groups:
         truck = dna_fragment_to_truck(group_dna, global_config)
-        total_fitness += compute_truck_fitness(truck)
-
-    return total_fitness
-
-
-def dna_fragment_to_truck(group_dna: DNAFragment, global_config: GlobalConfig) -> Truck:
-    """
-    Based on the information in the DNA of the truck, creating a truck object containing the list of path that if
-    will go through
-
-    :param group_dna: This is the DNA of the group. It's a list of integers, where each integer represents the index of a
-    place in the global_config.places list
-    :param global_config: GlobalConfig
-    :type global_config: GlobalConfig
-    :return: The truck inferred by the DNA group
-    """
+        x = compute_truck_fitness(truck)
+        fitness_distance, fitness_risk = x
+        total_fitness_risk += fitness_risk
+        total_fitness_distance += fitness_distance
+    return total_fitness_distance, total_fitness_risk
 
 
-    total_path = []
-
-    if not group_dna:
-        return Truck(total_path)
-
-    def _add_truck_path_from_places(place_1, place_2):
-        truck_path = TruckPath(
-            place_1,
-            place_2,
-            global_config.get_distance_between(place_1, place_2),
-            place_1.money
-        )
-
-        total_path.append(truck_path)
-
-    place1 = global_config.places[0]
-    place2 = global_config.places[group_dna[0]]
-
-    _add_truck_path_from_places(place1, place2)
-
-    for i in range(len(group_dna) - 1):
-        place1 = global_config.places[group_dna[i]]
-        place2 = global_config.places[group_dna[i + 1]]
-
-        _add_truck_path_from_places(place1, place2)
-
-    place1 = global_config.places[group_dna[-1]]
-    place2 = global_config.places[0]
-    _add_truck_path_from_places(place1, place2)
-
-    return Truck(total_path)
-
-
-def compute_truck_fitness(truck: Truck) -> float:
+@cache
+def compute_truck_fitness(truck: Truck):
     """
     The fitness of a truck is the sum of the distances of all its paths, plus the sum of the distances of all its paths
     multiplied by the money of all its paths
@@ -76,28 +55,14 @@ def compute_truck_fitness(truck: Truck) -> float:
     :param truck: the truck for which to compute the fitness
     :return: The fitness of the truck.
     """
-    fitness = 0
+    fitness_distance = 0
+    fitness_danger = 0
+
+    current_money = 0
 
     for path in truck.paths:
-        fitness += path.distance + path.distance * path.money
+        current_money += path.money
+        fitness_distance += path.distance  # + path.distance * path.money
+        fitness_danger += path.distance * current_money  # + path.distance * path.money
 
-    return fitness
-
-
-def divide_by_truck(dna):
-    """
-    Takes a DNA sequence and returns a list of three DNA sequences, each of which is a subsequence of the original.
-    It is used in order to divide the whole DNA in a group of 3 DNA's. It must be noted that the first number (0)
-    always represents the National Bank and that the last two represent where to cut the groups.
-
-    :param dna: the DNA string
-    :return: A list of lists.
-    """
-    group2_beginning = dna[-2] + 1
-    group3_beginning = dna[-1] + 1
-
-    group1 = dna[1:group2_beginning]
-    group2 = dna[group2_beginning:group3_beginning]
-    group3 = dna[group3_beginning:-2]
-
-    return [group1, group2, group3]
+    return [fitness_distance, fitness_danger]

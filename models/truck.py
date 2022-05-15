@@ -1,9 +1,13 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Tuple
 
 from models.truck_path import TruckPath
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, unsafe_hash=True)
 class Truck:
-    paths: List[TruckPath]
+    paths: Tuple[TruckPath]
+
+    @property
+    def money(self):
+        return sum(path.money for path in self.paths)

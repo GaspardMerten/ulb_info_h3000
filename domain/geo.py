@@ -6,7 +6,7 @@ import requests
 
 from models import Place, DistancesMap
 
-__all__ = ('get_distance_between', 'search', 'compute_distance_between_all_places')
+__all__ = ("get_distance_between", "search", "compute_distance_between_all_places")
 
 from utils.cache import cache
 
@@ -30,13 +30,15 @@ def search(search_string) -> [float, float]:
 
     address_dict = response_json[0]
 
-    return float(address_dict['lat']), float(address_dict['lon'])
+    return float(address_dict["lat"]), float(address_dict["lon"])
 
 
 @cache.memoize()
 def get_distance_between(origin: Place, destination: Place) -> float:
-    time_url = f'{OSM_ROUTING_URL}{origin.long},{origin.lat};{destination.long},{destination.lat}'
-    time_url_with_parameters = f'{time_url}?overview=false&alternatives=false&steps=false'
+    time_url = f"{OSM_ROUTING_URL}{origin.long},{origin.lat};{destination.long},{destination.lat}"
+    time_url_with_parameters = (
+        f"{time_url}?overview=false&alternatives=false&steps=false"
+    )
 
     response = requests.get(time_url_with_parameters)
     response_json = response.json()
@@ -44,7 +46,7 @@ def get_distance_between(origin: Place, destination: Place) -> float:
     if not response_json:
         raise Exception(f"Could not find time between {origin} and {destination}")
 
-    return response_json['routes'][0]['distance']
+    return response_json["routes"][0]["distance"]
 
 
 @cache.memoize()
@@ -52,8 +54,11 @@ def compute_distance_between_all_places(places: List[Place]) -> DistancesMap:
     results: DistancesMap = {}
 
     for count, place_one in enumerate(places):
+        print(f"[CACHE] Fetched all distances for {place_one.name}")
         for place_two in places:
             if place_one != place_two:
-                results[(place_one, place_two)] = get_distance_between(place_one, place_two)
+                results[(place_one, place_two)] = get_distance_between(
+                    place_one, place_two
+                )
 
     return results
