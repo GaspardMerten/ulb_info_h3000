@@ -6,13 +6,16 @@ from domain.algo.genetics.elements.crossover import crossovers
 from domain.algo.genetics.elements.mutations import mutations
 from domain.algo.genetics.elements.selections import selections
 from utils.compute_global_config import get_global_config
+from utils.save_algo_result import save_algo_result
 
 
 def process(a, b):
     for c in b:
-        _value = computing_with_genetics_algo(a, c)
-
-
+        try:
+            _value = computing_with_genetics_algo(a, c)
+            save_algo_result(_value, a)
+        except Exception as s:
+            print(s)
 def main():
     global_config = get_global_config()
 
