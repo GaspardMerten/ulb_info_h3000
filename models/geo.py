@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from typing import Dict, Tuple
-
-__all__ = ("Place", "DistancesMap")
+__all__ = ("Place",)
 
 
 @dataclass(slots=True, unsafe_hash=True)
@@ -13,4 +11,3 @@ class Place:
     money: float
 
 
-DistancesMap = Dict[Tuple[Place, Place], float]

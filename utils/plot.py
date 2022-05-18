@@ -1,22 +1,35 @@
-from typing import List, Tuple, Dict
+import dataclasses
+import json
+import uuid
+from typing import List
 
 from matplotlib import pyplot as plt
 
 from domain.dna import dna_fragment_to_truck, extract_fragments_from_dna
-from models import Place, DNA, GlobalConfig
+from models import Place, GlobalConfig
 from models.algo_result import TurnResult, AlgoResult
 from models.truck import Truck
+from utils.pareto import extract_pareto_from_generation
+from models.typedef import EnhancedGenerationResult
 
 
-def plot_algo_result(result: AlgoResult, config: GlobalConfig):
-    fig, axs = plt.subplots(figsize=(10, 10  ), nrows=2, ncols=2)
+class EnhancedJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
+
+
+def plot_algo_result(
+        result: AlgoResult, config: GlobalConfig, name_builder: uuid.uuid4
+):
+    fig, axs = plt.subplots(figsize=(10, 15), nrows=3, ncols=2)
 
     fig.suptitle("Algo result")
 
     _plot_bests_scores_on_graph(axs[0][0], turns=result.results)
     _plot_bests_evolution_on_graph(axs[0][1], turns=result.results)
     _plot_generations_on_graph(axs[1][0], generation=result.final_generation)
-
     _plot_truck_paths(
         axs[1][1],
         trucks=[
@@ -25,15 +38,22 @@ def plot_algo_result(result: AlgoResult, config: GlobalConfig):
         ],
     )
     _plot_places(axs[1][1], places=config.places)
+    _extract_and_plot_pareto_on_graph(axs[2][0], generation=result.final_generation)
 
+    plt.savefig(f"results/{name_builder()}.png")
     plt.show()
+
+
+def _extract_and_plot_pareto_on_graph(ax, generation: EnhancedGenerationResult):
+    pareto_generation = extract_pareto_from_generation(generation)
+
+    _plot_generations_on_graph(ax, pareto_generation)
 
 
 def _plot_bests_scores_on_graph(ax, turns: List[TurnResult]):
     z = []
     a = []
     t = []
-
 
     for item in turns:
         z.append(item.distance_fitness)
@@ -58,9 +78,7 @@ def _plot_bests_evolution_on_graph(ax, turns: List[TurnResult]):
     ax.plot(x, y)
 
 
-def _plot_generations_on_graph(
-        ax, generation: Dict[DNA, Tuple[float, Tuple[float, float]]]
-):
+def _plot_generations_on_graph(ax, generation: EnhancedGenerationResult):
     z = []
     a = []
 

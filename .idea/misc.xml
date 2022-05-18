@@ -26,6 +26,9 @@
     <option name="excludeFilter" value="" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (ulb_info_h3000)" project-jdk-type="Python SDK" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
   <component name="SuppressionsComponent">
     <option name="suppComments" value="[]" />
   </component>

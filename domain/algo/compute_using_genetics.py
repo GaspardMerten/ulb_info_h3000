@@ -7,7 +7,9 @@ from domain.compute_fitness import (
     compute_total_fitness_separated,
 )
 from domain.dna import (
-    generate_random_dna, dna_fragment_to_truck, extract_fragments_from_dna,
+    generate_random_dna,
+    dna_fragment_to_truck,
+    extract_fragments_from_dna,
 )
 from models import GlobalConfig, DNA
 from models.algo_result import AlgoResult, TurnResult
@@ -15,7 +17,7 @@ from utils.plot import plot_truck_paths_and_places
 
 
 def computing_with_genetics_algo(
-        config: GlobalConfig, algo_config: GeneticAlgorithmConfig
+    config: GlobalConfig, algo_config: GeneticAlgorithmConfig
 ) -> AlgoResult:
     algo = algo_config.algo_type(config)
 
@@ -54,13 +56,15 @@ def computing_with_genetics_algo(
         best_dna = current_generation[best_dna_index]
 
         assert (
-                sum(best_dna[1:20]) == 190 and len(best_dna) == 22
+            sum(best_dna[1:20]) == 190 and len(best_dna) == 22
         ), f"Incorrect DNA produced: {best_dna}"
 
         if previous_best > total_fitness:
 
             print(f"\nNew best {best_dna}\n")
-            boosted_dna, improvement_percentage = algo.get_boosted_dna(current_generation[best_dna_index])
+            boosted_dna, improvement_percentage = algo.get_boosted_dna(
+                current_generation[best_dna_index]
+            )
             if boosted_dna != best_dna:
                 current_generation[best_dna_index] = boosted_dna
                 total_fitness = compute_total_fitness(best_dna, config)
@@ -68,24 +72,19 @@ def computing_with_genetics_algo(
 
             total_fitness_separated = compute_total_fitness_separated(best_dna, config)
 
-            bests.append(TurnResult(
-                fitness=total_fitness,
-                risk_fitness=total_fitness_separated[1],
-                distance_fitness=total_fitness_separated[0],
-                dna=best_dna,
-                generation=turn,
-                boost_improvement=improvement_percentage
-            ))
+            bests.append(
+                TurnResult(
+                    fitness=total_fitness,
+                    risk_fitness=total_fitness_separated[1],
+                    distance_fitness=total_fitness_separated[0],
+                    dna=best_dna,
+                    generation=turn,
+                    boost_improvement=improvement_percentage,
+                )
+            )
 
             previous_best = total_fitness
-            plot_truck_paths_and_places(
-                trucks=[
-                    dna_fragment_to_truck(frag, config)
-                    for frag in extract_fragments_from_dna(best_dna)
-                ],
-                places=config.places,
-                title=str(total_fitness_separated) + " -> " + str(total_fitness),
-            )
+
         print(
             f"\rGeneration {turn}/{algo_config.number_of_generations} {len(current_generation)} {len(set(current_generation))}, \nTotal fitness:  {total_fitness}",
             end="",
@@ -96,7 +95,10 @@ def computing_with_genetics_algo(
         config=algo_config,
         algo=type(algo),
         final_generation={
-            dna: (compute_total_fitness(dna, config), compute_total_fitness_separated(dna, config))
+            dna: (
+                compute_total_fitness(dna, config),
+                compute_total_fitness_separated(dna, config),
+            )
             for dna in current_generation
-        }
+        },
     )

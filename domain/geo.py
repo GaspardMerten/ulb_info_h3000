@@ -26,7 +26,7 @@ def search(search_string) -> [float, float]:
     response_json = response.json()
 
     if not response_json:
-        raise Exception(f"Could not find result for {search_string}")
+        raise ValueError(f"Could not find result for {search_string}")
 
     address_dict = response_json[0]
 
@@ -44,7 +44,7 @@ def get_distance_between(origin: Place, destination: Place) -> float:
     response_json = response.json()
 
     if not response_json:
-        raise Exception(f"Could not find time between {origin} and {destination}")
+        raise ValueError(f"Could not find time between {origin} and {destination}")
 
     return response_json["routes"][0]["distance"]
 

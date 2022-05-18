@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 from typing import List
 
-from models.geo import Place, DistancesMap
+from models.geo import Place
 
 __all__ = ("GlobalConfig",)
+
+from models.typedef import DistancesMap
 
 
 @dataclass(slots=True)

@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from typing import List, Type, Dict, Tuple
+from typing import List, Type
 
 from domain.algo.genetics.config import GeneticAlgorithmConfig
 from models import DNA
+from models.typedef import EnhancedGenerationResult
 
 
 @dataclass(slots=True)
@@ -20,4 +21,4 @@ class AlgoResult:
     algo: Type
     config: GeneticAlgorithmConfig
     results: List[TurnResult]
-    final_generation: Dict[DNA, Tuple[float, Tuple[float, float]]]
+    final_generation: EnhancedGenerationResult

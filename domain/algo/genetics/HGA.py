@@ -30,7 +30,7 @@ class HGA(INaturalSelection):
     MARK = "LATTER"  # Can be definied as LATTER or FORMER
 
     def select_parents(
-            self, generation: List[DNA], fitness: Dict[int, int]
+        self, generation: List[DNA], fitness: Dict[int, int]
     ) -> List[int]:
         ordered_fitness: List[int] = list(
             dict(sorted(fitness.items(), key=lambda item: item[1])).keys()
@@ -82,7 +82,7 @@ class HGA(INaturalSelection):
             random_index = list(range(2, len(dna_list)))
             dna_list.pop(zero_index)
 
-            del random_index[zero_index:zero_index + 2]
+            del random_index[zero_index : zero_index + 2]
 
             final_index = random.choice(random_index)
             dna_list.insert(final_index, 0)
@@ -127,8 +127,10 @@ class HGA(INaturalSelection):
         return child2
 
     def generate_children_from_parents(
-            self, parent_one: DNA, parent_two: DNA
+        self, parent_one: DNA, parent_two: DNA
     ) -> List[DNA]:
+        if random.random() < 0.3:
+            return parent_one, parent_two
 
         child1 = self.generate_child1(parent_one, parent_two)
         child2 = self.generate_child2(parent_one, parent_two)
@@ -175,7 +177,7 @@ class HGA(INaturalSelection):
         return result
 
     def get_mutation_rate(self, current_population: List[DNA]) -> float:
-        return .6
+        return 0.6
 
     def apply_mutation(self, dna: DNA) -> DNA:
         random_result = random.random()
@@ -194,8 +196,8 @@ class HGA(INaturalSelection):
         # Part 1
         mutation_places = sorted(random.sample(range(1, 20), 2))
 
-        dna_list[mutation_places[0]: mutation_places[1]] = reversed(
-            dna_list[mutation_places[0]: mutation_places[1]]
+        dna_list[mutation_places[0] : mutation_places[1]] = reversed(
+            dna_list[mutation_places[0] : mutation_places[1]]
         )
 
         # Part 2
@@ -210,9 +212,9 @@ class HGA(INaturalSelection):
         switch_places = sorted(random.sample(range(1, 20), 2))
 
         group_1, group_2, group_3 = (
-            dna_list[1:switch_places[0]],
-            dna_list[switch_places[0]: switch_places[1]],
-            dna_list[switch_places[1]: 20],
+            dna_list[1 : switch_places[0]],
+            dna_list[switch_places[0] : switch_places[1]],
+            dna_list[switch_places[1] : 20],
         )
 
         dna_list = [0] + group_2 + group_1 + group_3 + dna_list[20:22]
