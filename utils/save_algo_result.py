@@ -1,3 +1,5 @@
+import dataclasses
+import json
 import uuid
 import xlsxwriter
 
@@ -17,7 +19,9 @@ def save_algo_result(result: AlgoResult, config: GlobalConfig, path: str = DEFAU
     best = result.results[-1]
 
     rows = [
-        ["Algorithm", str(result.algo.__name__)],
+        ["Selection", result.config.selection.__name__],
+        ["Mutation", result.config.mutation.__name__],
+        ["Crossover", result.config.crossover.__name__],
         ["Number of elements per generation", result.config.number_of_elements_per_generation],
         ["Number of generations", result.config.number_of_generations],
         ["Best fitness", best.fitness],
@@ -46,5 +50,8 @@ def save_algo_result(result: AlgoResult, config: GlobalConfig, path: str = DEFAU
         last_generation_sheet.write_row(c, 0, [str(r[0]), r[1][0], *r[1][1]])
 
     workbook.close()
+
+    with open(f"{path}{name}.json", mode="w") as json_file:
+        json_file.write(json.dumps(list(result.final_generation.items())))
 
     plot_algo_result(result, config, name_builder=lambda: name)

@@ -1,7 +1,9 @@
+import csv
+
 from domain import geo
 from domain.geo import compute_distance_between_all_places
 from models import GlobalConfig, Place
-from utils import csv
+from utils import csv_utils
 
 
 def get_global_config(asset_file: str = "assets/town_halls.csv"):
@@ -9,7 +11,7 @@ def get_global_config(asset_file: str = "assets/town_halls.csv"):
 
     places = []
 
-    for name, address, population in csv.get_rows_from_csv(asset_file):
+    for name, address, population in csv_utils.get_rows_from_csv(asset_file):
         long, lat = geo.search(address)
 
         total_money_in_town_hall = int(population) * MONEY_PER_RESIDENT

@@ -1,11 +1,11 @@
 import random
-from typing import List, Dict
+from typing import List
 
-from models import DNA, EnhancedGenerationResult
+from models import DNA, EnhancedGeneration
 
 
-def elitist_sample(generation: EnhancedGenerationResult) -> List[DNA]:
-    ordered_generation = list(map(lambda t: t[0], sorted(generation.items(), key=lambda x: x[1][0])))
+def elitist_sample(generation: EnhancedGeneration) -> List[DNA]:
+    ordered_generation = list(map(lambda t: t[0], sorted(generation, key=lambda x: x[1])))
 
     generation_size = len(ordered_generation)
 
@@ -22,8 +22,8 @@ def elitist_sample(generation: EnhancedGenerationResult) -> List[DNA]:
     return selected_parents_indexes
 
 
-def extreme_elitist_sample(generation: EnhancedGenerationResult) -> List[DNA]:
-    ordered_generation = list(map(lambda t: t[0], sorted(generation.items(), key=lambda x: x[1][0])))
+def extreme_elitist_sample(generation: EnhancedGeneration) -> List[DNA]:
+    ordered_generation = list(map(lambda t: t[0], sorted(generation, key=lambda x: x[1])))
 
     generation_size = len(ordered_generation)
 

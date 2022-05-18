@@ -2,7 +2,7 @@ import csv
 from unittest import TestCase
 
 from models import GlobalConfig, Place
-from utils import csv
+from utils import csv_utils
 from domain.compute_fitness import extract_fragments_from_dna, dna_fragment_to_truck
 from utils.compute_global_config import get_global_config
 

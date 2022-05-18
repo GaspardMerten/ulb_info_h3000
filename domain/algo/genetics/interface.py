@@ -1,7 +1,8 @@
 import random
 from abc import abstractmethod, ABC
-from typing import List, Dict, Tuple
+from typing import List, Tuple
 
+from models import EnhancedGenerationResult, EnhancedGeneration
 from models.config import GlobalConfig
 from models.dna import DNA
 
@@ -13,27 +14,26 @@ class INaturalSelection(ABC):
         self.config: GlobalConfig = config
 
     def generate_new_generation(
-        self,
-        old_generation: List[DNA],
-        fitness: Dict[int, int],
+            self,
+            old_generation: EnhancedGeneration,
     ) -> List[DNA]:
         old_generation_size = len(old_generation)
 
-        parents_index = self.select_parents(old_generation, fitness)
+        parents = self.select_parents(old_generation)
 
-        full_parents_index = [*parents_index]
+        assert len(parents) * 2 <= old_generation_size, "Too many parents selected"
 
-        while len(full_parents_index) * 2 < old_generation_size:
-            full_parents_index.append(random.choice(parents_index))
-
+        while len(parents) * 2 < old_generation_size:
+            parents.append(random.choice(parents))
         new_generation: List[DNA] = []
 
-        for parent_one in full_parents_index:
+        for parent_one in parents:
             parent_two = random.choice(
-                list(a for a in parents_index if a != parent_one)
+                list(a for a in parents if a != parent_one)
             )
+
             new_generation += self.generate_children_from_parents(
-                old_generation[parent_one], old_generation[parent_two]
+                parent_one, parent_two, config=self.config
             )
 
         return new_generation
@@ -53,14 +53,14 @@ class INaturalSelection(ABC):
 
     @abstractmethod
     def generate_children_from_parents(
-        self, parent_one: DNA, parent_two: DNA
+            self, parent_one: DNA, parent_two: DNA, **kwargs
     ) -> List[DNA]:
         raise NotImplementedError()
 
     @abstractmethod
     def select_parents(
-        self, generation: List[DNA], fitness: Dict[int, int]
-    ) -> List[int]:
+            self, generation: EnhancedGenerationResult
+    ) -> List[DNA]:
         raise NotImplementedError()
 
     @abstractmethod

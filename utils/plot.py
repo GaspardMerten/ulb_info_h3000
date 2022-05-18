@@ -38,13 +38,13 @@ def plot_algo_result(
         ],
     )
     _plot_places(axs[1][1], places=config.places)
-    _extract_and_plot_pareto_on_graph(axs[2][0], generation=result.final_generation)
+    extract_and_plot_pareto_on_graph(axs[2][0], generation=result.final_generation)
 
     plt.savefig(f"results/{name_builder()}.png")
     plt.show()
 
 
-def _extract_and_plot_pareto_on_graph(ax, generation: EnhancedGenerationResult):
+def extract_and_plot_pareto_on_graph(ax, generation: EnhancedGenerationResult):
     pareto_generation = extract_pareto_from_generation(generation)
 
     _plot_generations_on_graph(ax, pareto_generation)

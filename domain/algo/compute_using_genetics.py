@@ -1,6 +1,7 @@
 from math import inf
 from typing import List
 
+from domain.algo.genetics.composable import Composable
 from domain.algo.genetics.config import GeneticAlgorithmConfig
 from domain.compute_fitness import (
     compute_total_fitness,
@@ -8,18 +9,16 @@ from domain.compute_fitness import (
 )
 from domain.dna import (
     generate_random_dna,
-    dna_fragment_to_truck,
-    extract_fragments_from_dna,
 )
-from models import GlobalConfig, DNA
+from models import GlobalConfig, DNA, EnhancedGenerationResult, EnhancedGeneration
 from models.algo_result import AlgoResult, TurnResult
-from utils.plot import plot_truck_paths_and_places
 
 
 def computing_with_genetics_algo(
-    config: GlobalConfig, algo_config: GeneticAlgorithmConfig
+        config: GlobalConfig, algo_config: GeneticAlgorithmConfig
 ) -> AlgoResult:
-    algo = algo_config.algo_type(config)
+    algo = Composable(config=config, apply_mutation=algo_config.mutation,
+                      generate_children_from_parents=algo_config.crossover, select_parents=algo_config.selection, )
 
     current_generation: List[DNA] = [
         generate_random_dna()
@@ -32,11 +31,8 @@ def computing_with_genetics_algo(
     previous_best = inf
 
     for turn in range(algo_config.number_of_generations):
-        fitness = {
-            index: compute_total_fitness(dna, config)
-            for index, dna in enumerate(current_generation)
-        }
-        current_generation = algo.generate_new_generation(current_generation, fitness)
+        enhanced_generation = _build_enhanced_generation(current_generation, config)
+        current_generation = algo.generate_new_generation(enhanced_generation)
 
         algo.apply_mutation_to_generation(generation=current_generation)
 
@@ -46,7 +42,6 @@ def computing_with_genetics_algo(
         }
 
         total_fitness = sorted(fitness.values())[0]
-        print("MAX VALUE: " + str(total_fitness))
         best_dna_index = None
 
         for x, v in fitness.items():
@@ -56,7 +51,7 @@ def computing_with_genetics_algo(
         best_dna = current_generation[best_dna_index]
 
         assert (
-            sum(best_dna[1:20]) == 190 and len(best_dna) == 22
+                sum(best_dna[1:20]) == 190 and len(best_dna) == 22
         ), f"Incorrect DNA produced: {best_dna}"
 
         if previous_best > total_fitness:
@@ -93,12 +88,22 @@ def computing_with_genetics_algo(
     return AlgoResult(
         results=bests,
         config=algo_config,
-        algo=type(algo),
-        final_generation={
-            dna: (
-                compute_total_fitness(dna, config),
-                compute_total_fitness_separated(dna, config),
-            )
-            for dna in current_generation
-        },
+        final_generation=_build_enhanced_generation_result(current_generation, config),
     )
+
+
+def _build_enhanced_generation_result(generation: List[DNA], config: GlobalConfig) -> EnhancedGenerationResult:
+    return {
+        dna: (
+            compute_total_fitness(dna, config),
+            compute_total_fitness_separated(dna, config),
+        )
+        for dna in generation
+    }
+
+
+def _build_enhanced_generation(generation: List[DNA], config: GlobalConfig) -> EnhancedGeneration:
+    return [
+        (dna, compute_total_fitness(dna, config))
+        for dna in generation
+    ]
