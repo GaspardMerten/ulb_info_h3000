@@ -14,8 +14,8 @@ class INaturalSelection(ABC):
         self.config: GlobalConfig = config
 
     def generate_new_generation(
-        self,
-        old_generation: EnhancedGeneration,
+            self,
+            old_generation: EnhancedGeneration,
     ) -> List[DNA]:
         old_generation_size = len(old_generation)
 
@@ -46,12 +46,12 @@ class INaturalSelection(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def apply_mutation(self, dna: DNA) -> None:
+    def apply_mutation(self, dna: DNA) -> DNA:
         raise NotImplementedError()
 
     @abstractmethod
     def generate_children_from_parents(
-        self, parent_one: DNA, parent_two: DNA, **kwargs
+            self, parent_one: DNA, parent_two: DNA, **kwargs
     ) -> List[DNA]:
         raise NotImplementedError()
 
