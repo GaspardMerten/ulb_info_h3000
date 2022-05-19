@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import random
-from typing import Any, List, Tuple
+from typing import Any, Tuple
 
 from domain.dna import extract_fragments_from_dna
 from models import DNA, GlobalConfig
@@ -62,7 +62,7 @@ def rationalize(dna: DNA) -> tuple[int | Any, ...]:
         random_index = list(range(2, len(dna_list)))
         dna_list.pop(zero_index)
 
-        del random_index[zero_index: zero_index + 2]
+        del random_index[zero_index : zero_index + 2]
 
         final_index = random.choice(random_index)
         dna_list.insert(final_index, 0)
@@ -110,7 +110,7 @@ def generate_child2(parent_one, parent_two, config: GlobalConfig):
 
 
 def distance_based_crossover(
-        parent_one: DNA, parent_two: DNA, config: GlobalConfig
+    parent_one: DNA, parent_two: DNA, config: GlobalConfig
 ) -> Tuple[DNA]:
     if random.random() < 0.3:
         return parent_one, parent_two
@@ -141,12 +141,8 @@ def hga_algo(parent_one, parent_two, config: GlobalConfig):
         parent_one_list.remove(k)
         parent_two_list.remove(k)
 
-        distance_x_k = config.get_distance_between(
-            config.places[k], config.places[x]
-        )
-        distance_y_k = config.get_distance_between(
-            config.places[k], config.places[y]
-        )
+        distance_x_k = config.get_distance_between(config.places[k], config.places[x])
+        distance_y_k = config.get_distance_between(config.places[k], config.places[y])
 
         if distance_x_k < distance_y_k:
             k = x

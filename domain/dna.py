@@ -1,6 +1,7 @@
 import random
-from typing import Tuple
 from functools import cache
+from typing import Tuple
+
 from models import GlobalConfig, TruckPath, Truck, DNA, DNAFragment
 
 

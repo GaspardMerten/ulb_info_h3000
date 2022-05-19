@@ -11,11 +11,9 @@ def multi_point_crossover(parent_one: DNA, parent_two: DNA, **kwargs) -> Tuple[D
 
     pivots = random.sample(range(1, 21), k=2)
 
-    parent_one_list[pivots[0]: pivots[1]] = parent_two[pivots[0]: pivots[1]]
+    parent_one_list[pivots[0] : pivots[1]] = parent_two[pivots[0] : pivots[1]]
 
-    parent_two_list[pivots[1]: 20] = parent_one[pivots[1]: 20]
-    parent_two_list[1:pivots[0]] = parent_one[1:pivots[0]]
+    parent_two_list[pivots[1] : 20] = parent_one[pivots[1] : 20]
+    parent_two_list[1 : pivots[0]] = parent_one[1 : pivots[0]]
 
     return _fix_dna(parent_one_list), _fix_dna(parent_two_list)
-
-

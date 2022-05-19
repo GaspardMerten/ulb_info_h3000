@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict
-from typing import List, Type, Any, Dict
+from typing import List, Any, Dict
 
 from dacite import from_dict
 

@@ -5,7 +5,9 @@ from models import DNA, EnhancedGeneration
 
 
 def elitist_sample(generation: EnhancedGeneration) -> List[DNA]:
-    ordered_generation = list(map(lambda t: t[0], sorted(generation, key=lambda x: x[1])))
+    ordered_generation = list(
+        map(lambda t: t[0], sorted(generation, key=lambda x: x[1]))
+    )
 
     generation_size = len(ordered_generation)
 
@@ -23,14 +25,16 @@ def elitist_sample(generation: EnhancedGeneration) -> List[DNA]:
 
 
 def extreme_elitist_sample(generation: EnhancedGeneration) -> List[DNA]:
-    ordered_generation = list(map(lambda t: t[0], sorted(generation, key=lambda x: x[1])))
+    ordered_generation = list(
+        map(lambda t: t[0], sorted(generation, key=lambda x: x[1]))
+    )
 
     generation_size = len(ordered_generation)
 
     two_percent_index = round(generation_size / 50)
 
     # 8% (2% * 4)
-    ultra_elit_mode = ordered_generation[0: two_percent_index + 1] * 5
+    ultra_elit_mode = ordered_generation[0 : two_percent_index + 1] * 5
 
     twenty_percent_index = round(generation_size / 5)
     eighty_percent_index = round(generation_size / 10 * 9)

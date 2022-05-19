@@ -1,5 +1,3 @@
-import csv
-
 from domain import geo
 from domain.geo import compute_distance_between_all_places
 from models import GlobalConfig, Place

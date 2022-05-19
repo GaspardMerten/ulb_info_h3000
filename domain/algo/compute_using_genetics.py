@@ -15,10 +15,14 @@ from models.algo_result import AlgoResult, TurnResult
 
 
 def computing_with_genetics_algo(
-        config: GlobalConfig, algo_config: GeneticAlgorithmConfig
+    config: GlobalConfig, algo_config: GeneticAlgorithmConfig
 ) -> AlgoResult:
-    algo = Composable(config=config, apply_mutation=algo_config.mutation,
-                      generate_children_from_parents=algo_config.crossover, select_parents=algo_config.selection, )
+    algo = Composable(
+        config=config,
+        apply_mutation=algo_config.mutation,
+        generate_children_from_parents=algo_config.crossover,
+        select_parents=algo_config.selection,
+    )
 
     current_generation: List[DNA] = [
         generate_random_dna()
@@ -51,7 +55,7 @@ def computing_with_genetics_algo(
         best_dna = current_generation[best_dna_index]
 
         assert (
-                sum(best_dna[1:20]) == 190 and len(best_dna) == 22
+            sum(best_dna[1:20]) == 190 and len(best_dna) == 22
         ), f"Incorrect DNA produced: {best_dna}"
 
         if previous_best > total_fitness:
@@ -92,7 +96,9 @@ def computing_with_genetics_algo(
     )
 
 
-def _build_enhanced_generation_result(generation: List[DNA], config: GlobalConfig) -> EnhancedGenerationResult:
+def _build_enhanced_generation_result(
+    generation: List[DNA], config: GlobalConfig
+) -> EnhancedGenerationResult:
     return {
         dna: (
             compute_total_fitness(dna, config),
@@ -102,8 +108,7 @@ def _build_enhanced_generation_result(generation: List[DNA], config: GlobalConfi
     }
 
 
-def _build_enhanced_generation(generation: List[DNA], config: GlobalConfig) -> EnhancedGeneration:
-    return [
-        (dna, compute_total_fitness(dna, config))
-        for dna in generation
-    ]
+def _build_enhanced_generation(
+    generation: List[DNA], config: GlobalConfig
+) -> EnhancedGeneration:
+    return [(dna, compute_total_fitness(dna, config)) for dna in generation]

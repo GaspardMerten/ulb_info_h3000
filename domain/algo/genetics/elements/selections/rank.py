@@ -5,7 +5,9 @@ from models import DNA, EnhancedGeneration
 
 
 def rank_sample(generation: EnhancedGeneration) -> List[DNA]:
-    sorted_generation = list(map(lambda x : x[0], sorted(generation, key=lambda x: -x[1])))
+    sorted_generation = list(
+        map(lambda x: x[0], sorted(generation, key=lambda x: -x[1]))
+    )
 
     return random.choices(
         sorted_generation,

@@ -28,9 +28,11 @@ def tournament_sample_k2(generation: EnhancedGeneration) -> Generation:
     return winners
 
 
-def tournament_with_elimination_of_winners_sample(generation: EnhancedGeneration) -> Generation:
+def tournament_with_elimination_of_winners_sample(
+    generation: EnhancedGeneration,
+) -> Generation:
     winners = []
-    for _ in range(round(len(generation)/2)):
+    for _ in range(round(len(generation) / 2)):
         duelists = random.choices(generation, k=2)
 
         if duelists[1][1] > duelists[0][1]:

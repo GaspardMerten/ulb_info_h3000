@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import Tuple
 
 from models.truck_path import TruckPath
 

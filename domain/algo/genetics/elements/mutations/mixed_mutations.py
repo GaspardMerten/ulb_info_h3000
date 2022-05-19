@@ -1,6 +1,8 @@
 import random
 
-from domain.algo.genetics.elements.mutations.inversion_mutation import inversion_mutation
+from domain.algo.genetics.elements.mutations.inversion_mutation import (
+    inversion_mutation,
+)
 from domain.algo.genetics.elements.mutations.scramble_mutation import scramble_mutation
 from domain.algo.genetics.elements.mutations.swap_mutation import swap_mutation
 from models import DNA

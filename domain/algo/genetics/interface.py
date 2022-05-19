@@ -14,8 +14,8 @@ class INaturalSelection(ABC):
         self.config: GlobalConfig = config
 
     def generate_new_generation(
-            self,
-            old_generation: EnhancedGeneration,
+        self,
+        old_generation: EnhancedGeneration,
     ) -> List[DNA]:
         old_generation_size = len(old_generation)
 
@@ -28,9 +28,7 @@ class INaturalSelection(ABC):
         new_generation: List[DNA] = []
 
         for parent_one in parents:
-            parent_two = random.choice(
-                list(a for a in parents if a != parent_one)
-            )
+            parent_two = random.choice(list(a for a in parents if a != parent_one))
 
             new_generation += self.generate_children_from_parents(
                 parent_one, parent_two, config=self.config
@@ -53,14 +51,12 @@ class INaturalSelection(ABC):
 
     @abstractmethod
     def generate_children_from_parents(
-            self, parent_one: DNA, parent_two: DNA, **kwargs
+        self, parent_one: DNA, parent_two: DNA, **kwargs
     ) -> List[DNA]:
         raise NotImplementedError()
 
     @abstractmethod
-    def select_parents(
-            self, generation: EnhancedGenerationResult
-    ) -> List[DNA]:
+    def select_parents(self, generation: EnhancedGenerationResult) -> List[DNA]:
         raise NotImplementedError()
 
     @abstractmethod

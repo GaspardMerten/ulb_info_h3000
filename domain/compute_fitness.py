@@ -23,7 +23,7 @@ def compute_total_fitness(dna: DNA, global_config: GlobalConfig) -> float:
 
 @cache
 def compute_total_fitness_separated(
-        dna: DNA, global_config: GlobalConfig
+    dna: DNA, global_config: GlobalConfig
 ) -> Tuple[float, float]:
     """
     Takes a DNA and a global configuration, and returns the total fitness of the DNA
@@ -55,7 +55,9 @@ def compute_total_fitness_separated(
 
 
 @cache
-def should_apply_malus_based_on_constraints(trucks: Tuple[Truck], global_config: GlobalConfig) -> bool:
+def should_apply_malus_based_on_constraints(
+    trucks: Tuple[Truck], global_config: GlobalConfig
+) -> bool:
     total_money = sum(t.money for t in trucks)
 
     # Verify money constraint (a truck cannot transport more than alf of the money by himself)

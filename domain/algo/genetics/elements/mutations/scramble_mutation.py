@@ -1,6 +1,8 @@
 import random
 
-from domain.algo.genetics.elements.mutations._randomize_group_part import randomize_group_part
+from domain.algo.genetics.elements.mutations._randomize_group_part import (
+    randomize_group_part,
+)
 from models import DNA
 
 
