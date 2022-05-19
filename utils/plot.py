@@ -1,7 +1,6 @@
-import dataclasses
-import json
+import random
 import uuid
-from typing import List
+from typing import List, Dict
 
 from matplotlib import pyplot as plt
 
@@ -9,15 +8,10 @@ from domain.dna import dna_fragment_to_truck, extract_fragments_from_dna
 from models import Place, GlobalConfig
 from models.algo_result import TurnResult, AlgoResult
 from models.truck import Truck
-from utils.pareto import extract_pareto_from_generation
 from models.typedef import EnhancedGenerationResult
+from utils.pareto import extract_pareto_from_generation
 
-
-class EnhancedJSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if dataclasses.is_dataclass(o):
-            return dataclasses.asdict(o)
-        return super().default(o)
+_COLORS = list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF), range(100)))
 
 
 def plot_algo_result(
@@ -44,10 +38,19 @@ def plot_algo_result(
     plt.show()
 
 
-def extract_and_plot_pareto_on_graph(ax, generation: EnhancedGenerationResult):
+def plot_multiple_paretos_on_graph(ax, data: Dict[str, EnhancedGenerationResult]):
+    count = 0
+    for name, generation in data.items():
+        count += 1
+        extract_and_plot_pareto_on_graph(ax, generation, color=_COLORS[count], label=name, )
+
+    ax.legend()
+
+
+def extract_and_plot_pareto_on_graph(ax, generation: EnhancedGenerationResult, **kwargs):
     pareto_generation = extract_pareto_from_generation(generation)
 
-    _plot_generations_on_graph(ax, pareto_generation)
+    _plot_generations_on_graph(ax, pareto_generation, **kwargs)
 
 
 def _plot_bests_scores_on_graph(ax, turns: List[TurnResult]):
@@ -66,19 +69,30 @@ def _plot_bests_scores_on_graph(ax, turns: List[TurnResult]):
         ax.annotate(ele[0], ele[1])
 
 
-def _plot_bests_evolution_on_graph(ax, turns: List[TurnResult]):
+def plot_multiple_best_scores_evolution_on_graph(ax, args: Dict[str, List[TurnResult]], annotate=2):
+    count = 0
+    for name, turns in args.items():
+        count += 1
+        _plot_bests_evolution_on_graph(ax, turns, annotate, color=_COLORS[count], label=name, )
+
+    ax.legend()
+
+
+def _plot_bests_evolution_on_graph(ax, turns: List[TurnResult], annotate=1, **kwargs):
     x = []
     y = []
 
-    for item in turns:
+    for count, item in enumerate(turns):
         x.append(item.generation)
         y.append(item.fitness)
-        ax.annotate(round(item.fitness, 2), (item.generation, item.fitness))
 
-    ax.plot(x, y)
+        if annotate == 1 or (annotate == 2 and count == len(turns) - 1):
+            ax.annotate(round(item.fitness, 2), (item.generation, item.fitness))
+
+    ax.plot(x, y, **kwargs)
 
 
-def _plot_generations_on_graph(ax, generation: EnhancedGenerationResult):
+def _plot_generations_on_graph(ax, generation: EnhancedGenerationResult, **kwargs):
     z = []
     a = []
 
@@ -86,7 +100,11 @@ def _plot_generations_on_graph(ax, generation: EnhancedGenerationResult):
         z.append(values[0])
         a.append(values[1])
 
-    ax.scatter(z, a)
+    if 'plot' in kwargs:
+        kwargs.pop('plot')
+        ax.plot(z, a, **kwargs)
+    else:
+        ax.scatter(z, a, **kwargs)
 
 
 def plot_places_and_show(places: List[Place]):

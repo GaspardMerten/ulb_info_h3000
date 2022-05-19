@@ -1,11 +1,10 @@
 import random
 from typing import Tuple
-
+from functools import cache
 from models import GlobalConfig, TruckPath, Truck, DNA, DNAFragment
-from utils.cache import cache
 
 
-@cache.memoize()
+@cache
 def dna_fragment_to_truck(group_dna: DNAFragment, global_config: GlobalConfig) -> Truck:
     """
     Based on the information in the DNA of the truck, creating a truck object containing the list of path that if
@@ -39,7 +38,7 @@ def dna_fragment_to_truck(group_dna: DNAFragment, global_config: GlobalConfig) -
     return Truck(tuple(total_path))
 
 
-@cache.memoize()
+@cache
 def extract_fragments_from_dna(
     dna: DNA,
 ) -> Tuple[DNAFragment, DNAFragment, DNAFragment]:

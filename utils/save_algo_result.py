@@ -36,7 +36,7 @@ def save_algo_result(result: AlgoResult, config: GlobalConfig, path: str = DEFAU
     results_sheet = workbook.add_worksheet('Results')
 
     results_sheet.write_row(0, 0,
-                            ['DNA', 'Fitness', 'Distance fitness', 'Risk fitness', 'Generation', 'Boost imporvement'])
+                            ['DNA', 'Fitness', 'Distance fitness', 'Risk fitness', 'Generation', 'Boost improvement'])
 
     for c, r in enumerate(result.results, start=1):
         results_sheet.write_row(c, 0, [str(r.dna), r.fitness, r.distance_fitness, r.risk_fitness, r.generation,
