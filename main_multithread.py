@@ -16,25 +16,30 @@ def process(a, b):
             save_algo_result(_value, a)
         except Exception as s:
             print(s)
+
+
 def main():
     global_config = get_global_config()
 
     threads = []
     configs = []
 
-    for crossover in crossovers:
-        for mutation in mutations:
-            for selection in selections:
-                configs.append(
-                    GeneticAlgorithmConfig(
-                        number_of_generations=500,
-                        number_of_elements_per_generation=100,
-                        selection=selection,
-                        crossover=crossover,
-                        mutation=mutation,
-                    )
-                )
-
+    for number_of_elements_generations in [100, 200, 300, 400, 500]:
+        for mutation_rate in [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95]:
+            for crossover in crossovers:
+                for mutation in mutations:
+                    for selection in selections:
+                        configs.append(
+                            GeneticAlgorithmConfig(
+                                number_of_generations=500,
+                                number_of_elements_per_generation=number_of_elements_generations,
+                                selection=selection,
+                                crossover=crossover,
+                                mutation=mutation,
+                                mutation_rate=mutation_rate,
+                            )
+                        )
+    print((len(configs)))
     NUMBER_OF_PROCESSES = 10
 
     for i in range(NUMBER_OF_PROCESSES + 1):

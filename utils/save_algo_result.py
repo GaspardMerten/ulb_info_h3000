@@ -28,6 +28,7 @@ def save_algo_result(result: AlgoResult, config: GlobalConfig, path: str = DEFAU
         ["Best fitness distance", best.distance_fitness],
         ["Best fitness risk", best.risk_fitness],
         ["Best DNA", str(best.dna)],
+        ["Mutation rate", result.config.mutation_rate],
     ]
 
     for c, i in enumerate(rows):

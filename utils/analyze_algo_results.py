@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 from dataclasses import dataclass
 from os import listdir
 from os.path import join
@@ -22,10 +23,11 @@ class ExtractedResult:
     mutation: str
     crossover: str
     file_name: str
+    mutation_rate: float
 
     @property
     def name(self):
-        return f'{self.selection}-{self.mutation}-{self.crossover}'
+        return f'{self.selection}-{self.mutation}-{self.crossover}-{self.mutation_rate}'
 
 
 def _load_data(folder: str = '../results') -> List[ExtractedResult]:
@@ -44,6 +46,7 @@ def _load_data(folder: str = '../results') -> List[ExtractedResult]:
                 mutation = general_sheet['B2'].value
                 crossover = general_sheet['B3'].value
                 best_dna = _dna_from_string(general_sheet['B9'].value)
+                mutation_rate = general_sheet['B10'].value
 
                 results_sheet = wb["Results"]
                 results: List[TurnResult] = []
@@ -74,9 +77,9 @@ def _load_data(folder: str = '../results') -> List[ExtractedResult]:
                     crossover=crossover,
                     results=results,
                     generation=enhanced_generation,
+                    mutation_rate=mutation_rate
                 ))
-
-            except PermissionError:
+            except (FileNotFoundError, PermissionError):
                 pass
 
     return extracted_results
@@ -89,24 +92,47 @@ def _dna_from_string(dna_string: str) -> DNA:
 if __name__ == '__main__':
     data = _load_data()
 
-    sorted_data = list(sorted(data, key=lambda x: x.best_fitness))
+    sorted_data = list(sorted(data, key=lambda x: x.best_fitness + x.results[-1].generation/1000000))
 
     reduced_bests = sorted_data
     print(reduced_bests[0].file_name)
     plt.figure(figsize=(15, 15))
     plot_multiple_paretos_on_graph(plt, {
         item.name: item.generation
-        for item in reduced_bests
+        for item in reduced_bests[0:10]
     })
     plt.show()
 
     plt.figure(figsize=(35, 35))
     plot_multiple_best_scores_evolution_on_graph(plt, {
         item.name: item.results
-        for item in reduced_bests
+        for item in reduced_bests[0:20]
     })
     plt.show()
 
-    print("crossover,mutation,selection,fitness")
+    a = []
+
+    for i in data:
+        a.append(i.name)
+
+    results_dict = defaultdict(lambda: [])
+
+    for item in data:
+        results_dict[item.name].append(item.best_fitness)
+
+    avg_results_dict = {}
+
+    for name, values in results_dict.items():
+        if len(values) > 2:
+            avg_results_dict[name] = sum(values) / len(values)
+
+    sorted_avg_results = sorted(avg_results_dict.items(), key=lambda x: x[1])
+
+    print("Best algo", sorted_data[0].name)
+    print("Best algo (avg)", sorted_avg_results[0])
+
+    print(f"Algos testés: {len(set(a))}, Tests Effectués: {len(a)})")
+
+    print("crossover,mutation,selection,fitness,generation")
     for i in sorted_data:
-        print(f"{i.crossover},{i.mutation},{i.selection},{i.best_fitness}")
+        print(f"{i.crossover},{i.mutation},{i.selection},{i.best_fitness},{i.results[-1].generation}")

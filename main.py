@@ -24,7 +24,7 @@ def main():
                     algo_result = computing_with_genetics_algo(
                         global_config,
                         GeneticAlgorithmConfig(
-                            number_of_generations=2,
+                            number_of_generations=10000,
                             # out of 20 run, only one had a new best after the 500th generation
                             number_of_elements_per_generation=100,
                             selection=selection,

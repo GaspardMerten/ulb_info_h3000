@@ -13,14 +13,16 @@ class Composable(INaturalSelection):
             generate_children_from_parents: Callable[[EnhancedGeneration], List[DNA]],
             apply_mutation: Callable[[DNA], DNA],
             config: GlobalConfig,
+            mutation_rate: float,
     ):
         self.select_parents = select_parents
         self.generate_children_from_parents = generate_children_from_parents
         self.apply_mutation = apply_mutation
+        self.mutation_rate = mutation_rate
         super().__init__(config)
 
     def get_mutation_rate(self, current_population: List[DNA]) -> float:
-        return 0.6
+        return self.mutation_rate
 
     def select_parents(self, generation: EnhancedGenerationResult) -> List[DNA]:
         return []

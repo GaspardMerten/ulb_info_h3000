@@ -11,7 +11,7 @@ from models.truck import Truck
 from models.typedef import EnhancedGenerationResult
 from utils.pareto import extract_pareto_from_generation
 
-_COLORS = list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF), range(100)))
+_COLORS = list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF), range(10000)))
 
 
 def plot_algo_result(

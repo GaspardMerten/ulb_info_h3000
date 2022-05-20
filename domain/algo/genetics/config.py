@@ -14,3 +14,4 @@ class GeneticAlgorithmConfig:
     selection: Callable[[EnhancedGeneration], List[DNA]]
     crossover: Callable[[EnhancedGeneration], List[DNA]]
     mutation: Callable[[DNA], DNA]
+    mutation_rate: float
