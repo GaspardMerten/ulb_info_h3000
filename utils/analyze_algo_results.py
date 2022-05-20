@@ -33,7 +33,9 @@ class ExtractedResult:
 def _load_data(folder: str = '../results') -> List[ExtractedResult]:
     extracted_results = []
 
-    for file_name in listdir(folder):
+    for c, file_name in enumerate(listdir(folder)):
+        if not c % 100:
+            print(c)
         if '.xlsx' in file_name:
             file_path = join(folder, file_name)
 
@@ -94,19 +96,22 @@ if __name__ == '__main__':
 
     sorted_data = list(sorted(data, key=lambda x: x.best_fitness + x.results[-1].generation/1000000))
 
+    for i in sorted_data:
+        print(i.name)
+
     reduced_bests = sorted_data
     print(reduced_bests[0].file_name)
     plt.figure(figsize=(15, 15))
     plot_multiple_paretos_on_graph(plt, {
         item.name: item.generation
-        for item in reduced_bests[0:10]
+        for item in reduced_bests[0:20]
     })
     plt.show()
 
-    plt.figure(figsize=(35, 35))
+    plt.figure(figsize=(15, 15))
     plot_multiple_best_scores_evolution_on_graph(plt, {
         item.name: item.results
-        for item in reduced_bests[0:20]
+        for item in reduced_bests[0:100]
     })
     plt.show()
 
@@ -118,15 +123,17 @@ if __name__ == '__main__':
     results_dict = defaultdict(lambda: [])
 
     for item in data:
-        results_dict[item.name].append(item.best_fitness)
+        results_dict[item.name].append(item.best_fitness, )
 
     avg_results_dict = {}
 
     for name, values in results_dict.items():
-        if len(values) > 2:
-            avg_results_dict[name] = sum(values) / len(values)
+        avg_results_dict[name] = sum(values) / len(values)
 
     sorted_avg_results = sorted(avg_results_dict.items(), key=lambda x: x[1])
+
+    for rank, i in enumerate(sorted_avg_results, start=1):
+        print(f'#{rank},{i[0]},{i[1]}')
 
     print("Best algo", sorted_data[0].name)
     print("Best algo (avg)", sorted_avg_results[0])

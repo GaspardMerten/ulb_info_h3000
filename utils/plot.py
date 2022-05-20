@@ -89,6 +89,7 @@ def _plot_bests_evolution_on_graph(ax, turns: List[TurnResult], annotate=1, **kw
         if annotate == 1 or (annotate == 2 and count == len(turns) - 1):
             ax.annotate(round(item.fitness, 2), (item.generation, item.fitness))
 
+
     ax.plot(x, y, **kwargs)
 
 
