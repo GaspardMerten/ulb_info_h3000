@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 from typing import List, Callable, Tuple
 
 from domain.algo.genetics.interface import INaturalSelection
@@ -35,7 +35,7 @@ class Composable(INaturalSelection):
     def apply_mutation(self, dna: DNA) -> DNA:
         return []
 
-    @cache
+    @lru_cache(10000)
     def get_boosted_dna(self, dna: DNA) -> Tuple[DNA, float]:
         dna_list = list(dna)
 

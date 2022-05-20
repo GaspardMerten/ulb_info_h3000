@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 from typing import Tuple
 
 from domain.dna import extract_fragments_from_dna, dna_fragment_to_truck
@@ -8,7 +8,7 @@ _AVG_TOTAL_FITNESS_RISK = 8000000000
 _AVG_TOTAL_FITNESS_DISTANCE = 70000
 
 
-@cache
+@lru_cache(10000)
 def compute_total_fitness(dna: DNA, global_config: GlobalConfig) -> float:
     """
     Takes a DNA and a global configuration, and returns the total fitness of the DNA
@@ -21,7 +21,7 @@ def compute_total_fitness(dna: DNA, global_config: GlobalConfig) -> float:
     return result[0] / _AVG_TOTAL_FITNESS_DISTANCE + result[1] / _AVG_TOTAL_FITNESS_RISK
 
 
-@cache
+@lru_cache(10000)
 def compute_total_fitness_separated(
     dna: DNA, global_config: GlobalConfig
 ) -> Tuple[float, float]:
@@ -54,7 +54,7 @@ def compute_total_fitness_separated(
     return total_fitness_distance, total_fitness_risk
 
 
-@cache
+@lru_cache(10000)
 def should_apply_malus_based_on_constraints(
     trucks: Tuple[Truck], global_config: GlobalConfig
 ) -> bool:
@@ -74,7 +74,7 @@ def should_apply_malus_based_on_constraints(
     return False
 
 
-@cache
+@lru_cache(10000)
 def compute_truck_fitness(truck: Truck):
     """
     The fitness of a truck is the sum of the distances of all its paths, plus the sum of the distances of all its paths

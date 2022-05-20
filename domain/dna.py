@@ -1,11 +1,11 @@
 import random
-from functools import cache
+from functools import lru_cache
 from typing import Tuple
 
 from models import GlobalConfig, TruckPath, Truck, DNA, DNAFragment
 
 
-@cache
+@lru_cache(10000)
 def dna_fragment_to_truck(group_dna: DNAFragment, global_config: GlobalConfig) -> Truck:
     """
     Based on the information in the DNA of the truck, creating a truck object containing the list of path that if
@@ -39,7 +39,7 @@ def dna_fragment_to_truck(group_dna: DNAFragment, global_config: GlobalConfig) -
     return Truck(tuple(total_path))
 
 
-@cache
+@lru_cache(10000)
 def extract_fragments_from_dna(
     dna: DNA,
 ) -> Tuple[DNAFragment, DNAFragment, DNAFragment]:
