@@ -22,7 +22,7 @@ def computing_with_genetics_algo(
         apply_mutation=algo_config.mutation,
         generate_children_from_parents=algo_config.crossover,
         select_parents=algo_config.selection,
-        mutation_rate=algo_config.mutation_rate
+        mutation_rate=algo_config.mutation_rate,
     )
 
     current_generation: List[DNA] = [

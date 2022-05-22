@@ -9,5 +9,3 @@ class Place:
     lat: float
     long: float
     money: float
-
-

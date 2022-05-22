@@ -15,7 +15,7 @@ _COLORS = list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF), range(1
 
 
 def plot_algo_result(
-        result: AlgoResult, config: GlobalConfig, name_builder: uuid.uuid4
+    result: AlgoResult, config: GlobalConfig, name_builder: uuid.uuid4
 ):
     fig, axs = plt.subplots(figsize=(10, 15), nrows=3, ncols=2)
 
@@ -42,12 +42,19 @@ def plot_multiple_paretos_on_graph(ax, data: Dict[str, EnhancedGenerationResult]
     count = 0
     for name, generation in data.items():
         count += 1
-        extract_and_plot_pareto_on_graph(ax, generation, color=_COLORS[count], label=name, )
+        extract_and_plot_pareto_on_graph(
+            ax,
+            generation,
+            color=_COLORS[count],
+            label=name,
+        )
 
     ax.legend()
 
 
-def extract_and_plot_pareto_on_graph(ax, generation: EnhancedGenerationResult, **kwargs):
+def extract_and_plot_pareto_on_graph(
+    ax, generation: EnhancedGenerationResult, **kwargs
+):
     pareto_generation = extract_pareto_from_generation(generation)
 
     _plot_generations_on_graph(ax, pareto_generation, **kwargs)
@@ -69,11 +76,19 @@ def _plot_bests_scores_on_graph(ax, turns: List[TurnResult]):
         ax.annotate(ele[0], ele[1])
 
 
-def plot_multiple_best_scores_evolution_on_graph(ax, args: Dict[str, List[TurnResult]], annotate=2):
+def plot_multiple_best_scores_evolution_on_graph(
+    ax, args: Dict[str, List[TurnResult]], annotate=2
+):
     count = 0
     for name, turns in args.items():
         count += 1
-        _plot_bests_evolution_on_graph(ax, turns, annotate, color=_COLORS[count], label=name, )
+        _plot_bests_evolution_on_graph(
+            ax,
+            turns,
+            annotate,
+            color=_COLORS[count],
+            label=name,
+        )
 
     ax.legend()
 
@@ -89,7 +104,6 @@ def _plot_bests_evolution_on_graph(ax, turns: List[TurnResult], annotate=1, **kw
         if annotate == 1 or (annotate == 2 and count == len(turns) - 1):
             ax.annotate(round(item.fitness, 2), (item.generation, item.fitness))
 
-
     ax.plot(x, y, **kwargs)
 
 
@@ -101,8 +115,8 @@ def _plot_generations_on_graph(ax, generation: EnhancedGenerationResult, **kwarg
         z.append(values[0])
         a.append(values[1])
 
-    if 'plot' in kwargs:
-        kwargs.pop('plot')
+    if "plot" in kwargs:
+        kwargs.pop("plot")
         ax.plot(z, a, **kwargs)
     else:
         ax.scatter(z, a, **kwargs)

@@ -19,18 +19,20 @@ def main():
     for crossover in crossovers:
         for mutation in mutations:
             for selection in selections:
-                print(f"Algo: ${crossover.__name__}-{mutation.__name__}-{selection.__name__}")
+                print(
+                    f"Algo: ${crossover.__name__}-{mutation.__name__}-{selection.__name__}"
+                )
                 for _ in range(1):
                     algo_result = computing_with_genetics_algo(
                         global_config,
                         GeneticAlgorithmConfig(
-                            number_of_generations=10000,
-                            # out of 20 run, only one had a new best after the 500th generation
-                            number_of_elements_per_generation=100,
+                            number_of_generations=500,
+                            number_of_elements_per_generation=200,
                             selection=selection,
                             crossover=crossover,
                             mutation=mutation,
-                        )
+                            mutation_rate=.8
+                        ),
                     )
 
                     save_algo_result(algo_result, global_config)
@@ -39,5 +41,5 @@ def main():
                 current_variant_count += 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

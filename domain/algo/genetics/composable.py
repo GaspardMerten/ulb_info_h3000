@@ -8,12 +8,12 @@ from models import DNA, GlobalConfig, EnhancedGeneration, EnhancedGenerationResu
 
 class Composable(INaturalSelection):
     def __init__(
-            self,
-            select_parents: Callable[[EnhancedGeneration], List[DNA]],
-            generate_children_from_parents: Callable[[EnhancedGeneration], List[DNA]],
-            apply_mutation: Callable[[DNA], DNA],
-            config: GlobalConfig,
-            mutation_rate: float,
+        self,
+        select_parents: Callable[[EnhancedGeneration], List[DNA]],
+        generate_children_from_parents: Callable[[EnhancedGeneration], List[DNA]],
+        apply_mutation: Callable[[DNA], DNA],
+        config: GlobalConfig,
+        mutation_rate: float,
     ):
         self.select_parents = select_parents
         self.generate_children_from_parents = generate_children_from_parents
